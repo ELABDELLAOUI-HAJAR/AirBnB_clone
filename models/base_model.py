@@ -2,29 +2,34 @@
 """This module defines a class BaseModel"""
 from uuid import uuid4
 from datetime import datetime
+import models
 
 
 class BaseModel:
     """Class BaseModel defines all common
     attributes/methods for other classes
     """
+
     def __init__(self, *args, **kwargs):
         """Initialise BaseModel attributes
         Arguments:
         args: Not used
         kwargs: Dictionary representation of BaseModel instance
         """
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
-
-        for key, value in kwargs.items():
-            if key == "id":
-                self.id = value
-            elif key == "created_at":
-                self.created_at = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-            elif key == "updated_at":
-                self.updated_at = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+        if len(kwargs) == 0:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            models.storage.new(self)
+        else:
+            frmt = "%Y-%m-%dT%H:%M:%S.%f"
+            for key, value in kwargs.items():
+                if key == "id":
+                    self.id = value
+                elif key == "created_at":
+                    self.created_at = datetime.strptime(value, frmt)
+                elif key == "updated_at":
+                    self.updated_at = datetime.strptime(value, frmt)
 
     def __str__(self):
         """Return string representation of BaseModel"""
@@ -34,6 +39,7 @@ class BaseModel:
     def save(self):
         """update the attribute updated_at"""
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """returns BaseModel dictionary"""
