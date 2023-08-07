@@ -5,6 +5,7 @@ from models.base_model import BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
+from models.amenity import Amenity
 import models
 from shlex import split
 from datetime import datetime
@@ -16,7 +17,8 @@ class HBNBCommand(cmd.Cmd):
     __classNames = ["BaseModel",
                     "User",
                     "State",
-                    "City"]
+                    "City",
+                    "Amenity"]
 
     def do_EOF(self, line):
         """Exit when EOF or when Press CTRL+D"""
