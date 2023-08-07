@@ -2,13 +2,16 @@
 """The entry point of the command interpreter"""
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 import models
+from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter Class"""
     prompt = '(hbnb) '
-    __classNames = ["BaseModel"]
+    __classNames = ["BaseModel",
+                    "User"]
 
     def do_EOF(self, line):
         """Exit when EOF or when Press CTRL+D"""
@@ -23,7 +26,7 @@ class HBNBCommand(cmd.Cmd):
         """Creates a new instance of <Class> and saves it to a JSON file"""
         args = self.split(line)
 
-        if len(args) == 1 and len(args[0]) == 0:
+        if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -37,7 +40,7 @@ class HBNBCommand(cmd.Cmd):
         based on the class name and id """
         args = self.split(line)
 
-        if len(args) == 1 and len(args[0]) == 0:
+        if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -57,8 +60,8 @@ class HBNBCommand(cmd.Cmd):
         based or not on the class name """
         args = self.split(line)
         objects = models.storage.all()
-
-        if len(args) == 1 and len(args[0]) == 0:
+       
+        if len(args) == 0:
             print([obj.__str__() for obj in objects.values()])
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -71,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
         (save the change into the JSON file) """
         args = self.split(line)
 
-        if len(args) == 1 and len(args[0]) == 0:
+        if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -93,7 +96,7 @@ class HBNBCommand(cmd.Cmd):
         args = self.split(line)
         objects = models.storage.all()
 
-        if len(args) == 1 and len(args[0]) == 0:
+        if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -116,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
 
     @staticmethod
     def split(line):
-        return line.split(" ")
+        return split(line)
 
 
 if __name__ == '__main__':

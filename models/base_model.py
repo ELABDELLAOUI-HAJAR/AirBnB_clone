@@ -30,6 +30,8 @@ class BaseModel:
                     self.created_at = datetime.strptime(value, frmt)
                 elif key == "updated_at":
                     self.updated_at = datetime.strptime(value, frmt)
+                else:
+                    self.__dict__[key] = value
 
     def __str__(self):
         """Return string representation of BaseModel"""
@@ -43,8 +45,8 @@ class BaseModel:
 
     def to_dict(self):
         """returns BaseModel dictionary"""
-        my_dict = self.__dict__.copy()
-        my_dict["__class__"] = self.__class__.__name__
-        my_dict["created_at"] = self.created_at.isoformat()
-        my_dict["updated_at"] = self.updated_at.isoformat()
-        return my_dict
+        dict_copy = self.__dict__.copy()
+        dict_copy["__class__"] = self.__class__.__name__
+        dict_copy["created_at"] = self.created_at.isoformat()
+        dict_copy["updated_at"] = self.updated_at.isoformat()
+        return dict_copy
