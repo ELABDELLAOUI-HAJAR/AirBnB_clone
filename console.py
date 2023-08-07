@@ -3,15 +3,18 @@
 import cmd
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
 import models
 from shlex import split
+from datetime import datetime
 
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter Class"""
     prompt = '(hbnb) '
     __classNames = ["BaseModel",
-                    "User"]
+                    "User",
+                    "State"]
 
     def do_EOF(self, line):
         """Exit when EOF or when Press CTRL+D"""
@@ -60,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
         based or not on the class name """
         args = self.split(line)
         objects = models.storage.all()
-       
+
         if len(args) == 0:
             print([obj.__str__() for obj in objects.values()])
         elif args[0] not in self.__classNames:
@@ -115,6 +118,7 @@ class HBNBCommand(cmd.Cmd):
                 obj[args[2]] = value_type(args[3])
             else:
                 obj[args[2]] = args[3]
+            obj["updated_at"] = datetime.now()
             models.storage.save()
 
     @staticmethod
