@@ -6,6 +6,7 @@ from models.user import User
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.place import Place
 import models
 from shlex import split
 from datetime import datetime
@@ -18,7 +19,8 @@ class HBNBCommand(cmd.Cmd):
                     "User",
                     "State",
                     "City",
-                    "Amenity"]
+                    "Amenity",
+                    "Place"]
 
     def do_EOF(self, line):
         """Exit when EOF or when Press CTRL+D"""
@@ -116,13 +118,13 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 3:
             print("** value missing **")
         else:
-            obj = objects["{}.{}".format(args[0], args[1])].__dict__
-            if args[2] in obj.keys():
-                value_type = type(obj[args[2]])
-                obj[args[2]] = value_type(args[3])
+            obj = objects["{}.{}".format(args[0], args[1])]
+            if args[2] in obj.__class__.__dict__.keys():
+                value_type = type(obj.__class__.__dict__[args[2]])
+                obj.__dict__[args[2]] = value_type(args[3])
             else:
-                obj[args[2]] = args[3]
-            obj["updated_at"] = datetime.now()
+                obj.__dict__[args[2]] = args[3]
+            obj.__dict__["updated_at"] = datetime.now()
             models.storage.save()
 
     @staticmethod
