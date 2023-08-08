@@ -139,17 +139,18 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
         elif len(args) == 3:
             print("** value missing **")
-        elif len(args) == 4:
+        else:
+            args_list = args[2:]
             obj = objects["{}.{}".format(args[0], args[1])]
-            if args[2] in obj.__class__.__dict__.keys():
-                value_type = type(obj.__class__.__dict__[args[2]])
-                obj.__dict__[args[2]] = value_type(args[3])
-            else:
-                obj.__dict__[args[2]] = args[3]
+
+            for idx in range(0, len(args_list), 2):
+                if args_list[idx] in obj.__class__.__dict__.keys():
+                    val_type = type(obj.__class__.__dict__[args_list[idx]])
+                    obj.__dict__[args_list[idx]] = val_type(args_list[idx + 1])
+                else:
+                    obj.__dict__[args_list[idx]] = args_list[idx + 1]
             obj.__dict__["updated_at"] = datetime.now()
             models.storage.save()
-        else:
-            print("Under development")
 
     @staticmethod
     def split(line):
