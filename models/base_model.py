@@ -16,12 +16,12 @@ class BaseModel:
         args: Not used
         kwargs: Dictionary representation of BaseModel instance
         """
-        if len(kwargs) == 0:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            models.storage.new(self)
-        else:
+
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+
+        if len(kwargs) != 0:
             frmt = "%Y-%m-%dT%H:%M:%S.%f"
             for key, value in kwargs.items():
                 if key == "id":
@@ -32,6 +32,7 @@ class BaseModel:
                     self.updated_at = datetime.strptime(value, frmt)
                 else:
                     self.__dict__[key] = value
+        models.storage.new(self)
 
     def __str__(self):
         """Return string representation of BaseModel"""
