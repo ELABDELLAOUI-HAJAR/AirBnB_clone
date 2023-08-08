@@ -37,15 +37,21 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """Default behavior of cmd module"""
         cmds = {
-                "all": self.do_all,
-                "show": self.do_show,
-                "destroy": self.do_destroy,
-                "update": self.do_update
-                }
+            "all": self.do_all,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update,
+            "count": self.count
+        }
         args = re.findall(r'\w+|"[0-9a-z-?]+"', line)
         args = [arg[1:-1] if arg[0] == '"' else arg for arg in args]
         if len(args) >= 2 and args[1] in cmds.keys():
             return cmds[args[1]](args[0] + ' ' + " ".join(args[2:]))
+
+    def count(self, line):
+        objs = models.storage.all()
+        print(len([obj for obj in objs.keys()
+                   if obj.split(".")[0] == line.split()[0]]))
 
     def do_create(self, line):
         """Creates a new instance of <Class> and saves it to a JSON file"""
