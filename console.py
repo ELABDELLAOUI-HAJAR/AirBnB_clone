@@ -43,7 +43,8 @@ class HBNBCommand(cmd.Cmd):
             "update": self.do_update,
             "count": self.count
         }
-        args = re.findall(r'\w+|"[0-9a-z-?]+"', line)
+        # args = re.findall(r'\w+|"[0-9a-z-?]+"', line)
+        args = re.findall(r'[-+]?[0-9]*\.[0-9]+|[-+]?\w+|"[0-9a-z-?]+"', line)
         args = [arg[1:-1] if arg[0] == '"' else arg for arg in args]
         if len(args) >= 2 and args[1] in cmds.keys():
             return cmds[args[1]](args[0] + ' ' + " ".join(args[2:]))
