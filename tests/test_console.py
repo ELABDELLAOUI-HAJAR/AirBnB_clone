@@ -3,6 +3,7 @@ from console import HBNBCommand
 from io import StringIO
 import uuid
 from models.base_model import BaseModel
+from models.amenity import Amenity
 from models.user import User
 from models.place import Place
 from models.engine.file_storage import FileStorage
@@ -64,7 +65,7 @@ class TestConsole_help(TestCase):
 
     def test_console_help_all(self):
         """test_console_help_all"""
-        e = "Prints str representation of"
+        e = "Prints str repr of"
         e += " all class instances Usage:all <class>"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help all")
@@ -406,6 +407,147 @@ class TestConsole_update(TestCase):
         updated_place = models.storage.all()["Place.{}".format(place.id)]
         self.assertEqual(updated_place.name, "Amizmiz")
         self.assertEqual(type(updated_place.name), str)
+
+
+class TestConsole_default(TestCase):
+    """Test case of Console default"""
+    
+    file_path = "HA_YA_FILE.json"
+
+    def setUp(self):
+        """setUp method executes before each test case"""
+        FileStorage._FileStorage__objects = {}
+
+    def test_console_default_all(self):
+        """test_console_default_all"""
+        base1 = BaseModel()
+        base2 = BaseModel()
+        user1 = User()
+        user1.first_name = "Yassine"
+        user1.last_name = "Amzmiz"
+        user2 = User()
+        user2.first_name = "Hajar"
+        user2.last_name = "Test"
+        place1 = Place()
+        place1.name = "Marrakech"
+        place2 = Place()
+        place2.name = "Sale"
+        objs = models.storage.all()
+        base_list = [obj.__str__() for obj in objs.values()
+                if obj.__class__.__name__ == "BaseModel"]
+        user_list = [obj.__str__() for obj in objs.values()
+                if obj.__class__.__name__ == "User"]
+        place_list = [obj.__str__() for obj in objs.values()
+                if obj.__class__.__name__ == "Place"]
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("BaseModel.all()")
+            objs_str = output.getvalue().strip()
+            self.assertEqual(str(base_list), objs_str)
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("User.all()")
+            objs_str = output.getvalue().strip()
+            self.assertEqual(str(user_list), objs_str)
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("Place.all()")
+            objs_str = output.getvalue().strip()
+            self.assertEqual(str(place_list), objs_str)
+
+    def test_console_default_count(self):
+        """test_console_default_count"""
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("BaseModel.count()")
+            self.assertEqual(output.getvalue().strip(), "0")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:     
+            base1 = BaseModel()
+            HBNBCommand().onecmd("BaseModel.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            base2 = BaseModel()
+            HBNBCommand().onecmd("BaseModel.count()")
+            self.assertEqual(output.getvalue().strip(), "2")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("destroy BaseModel {}".format(base2.id))
+            HBNBCommand().onecmd("BaseModel.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("Amenity.count()")
+            self.assertEqual(output.getvalue().strip(), "0")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            amenity = Amenity()
+            HBNBCommand().onecmd("Amenity.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
+    def test_console_default_show_no_exist_id(self):
+        """test_console_default_show_no_exist_id"""
+        expected = "** no instance found **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Place.show("xxxx-xxxx-xxxx-xxxx")')
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_show_missing_id(self):
+        """test_console_default_show_no_exist_id"""
+        expected = "** instance id missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Place.show()')
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_show(self):
+        """test_console_default_show"""
+        user = User()
+        user.email = "yassine1990@alx.com"
+        user.password = "yassine@1991*$"
+        usr_str = user.__str__()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('User.show("{}")'.format(user.id))
+            self.assertEqual(usr_str, output.getvalue().strip())
+
+    def test_console_default_destroy_no_exist_id(self):
+        """test_console_default_destroy_no_exist_id"""
+        expected = "** no instance found **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Place.destroy("xxxx-xxxx-xxxx-xxxx")')
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_destroy_missing_id(self):
+        """test_console_default_destroy_no_exist_id"""
+        expected = "** instance id missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Place.show()')
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_destroy_instance(self):
+        """test_console_default_destroy_instance"""
+        user = User()
+        user.email = "yassine1990@alx.com"
+        user.password = "yassine@1991*$"
+        HBNBCommand().onecmd('User.destroy("{}")'.format(user.id))
+        objs = models.storage.all()
+        self.assertNotIn("User.{}".format(user.id), objs.keys())
+
+
+    def test_console_default_destroy(self):
+        """test_console_default_show"""
+        user1 = User()
+        user2 = User()
+        user3 = User()
+        HBNBCommand().onecmd('User.destroy("{}")'.format(user1.id))
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("User.count()")
+            self.assertEqual(output.getvalue().strip(), "2")
+        HBNBCommand().onecmd('User.destroy("{}")'.format(user2.id))
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("User.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+        HBNBCommand().onecmd('User.destroy("{}")'.format(user3.id))
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("User.count()")
+            self.assertEqual(output.getvalue().strip(), "0")
+            
 
 
 if __name__ == "__main__":
