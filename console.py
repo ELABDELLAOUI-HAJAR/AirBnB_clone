@@ -149,6 +149,11 @@ class HBNBCommand(cmd.Cmd):
             obj.__dict__["updated_at"] = datetime.now()
             models.storage.save()
 
+    def emptyline(self):
+        """Method called when an empty line is entered
+        in response to the prompt"""
+        pass
+
     @staticmethod
     def split(line):
         return split(line)
