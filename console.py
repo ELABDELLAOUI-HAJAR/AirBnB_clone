@@ -44,7 +44,8 @@ class HBNBCommand(cmd.Cmd):
             "count": self.count
         }
         # args = re.findall(r'\w+|"[0-9a-z-?]+"', line)
-        args = re.findall(r'[-+]?[0-9]*\.[0-9]+|[-+]?\w+|"[0-9a-z-?]+"', line)
+        regex = r'\w+@\w+.\w+|[-+]?[0-9]*\.[0-9]+|[-+]?\w+|"[0-9a-z-?]+"'
+        args = re.findall(regex, line)
         args = [arg[1:-1] if arg[0] == '"' else arg for arg in args]
         # to bypass the test .all() :p
         if len(args) == 1 and args[0] in cmds.keys():
