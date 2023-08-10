@@ -4,6 +4,7 @@ from io import StringIO
 import uuid
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
 from models.engine.file_storage import FileStorage
 import json
 import models
@@ -315,6 +316,96 @@ class TestConsole_destroy(TestCase):
         with open(self.file_path, "r") as f:
             objs = json.load(f)
             self.assertNotIn("BaseModel.{}".format(base.id), objs.keys())
+
+class TestConsole_update(TestCase):
+    """Test update command"""
+
+    file_path = "HA_YA_FILE.json"
+
+    def test_update_missing_class(self):
+        """test_update_missing_class"""
+        expected_output = "** class name missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("update")
+            self.assertEqual(expected_output, output.getvalue().strip())
+
+    def test_update_with_non_exist_class(self):
+        """test_update_with_non_exist_class"""
+        expected_output = "** class doesn't exist **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("update NonExistClass")
+            self.assertEqual(expected_output, output.getvalue().strip())
+
+    def test_update_with_missing_id(self):
+        """test_update_with_missing_id"""
+        expected_output = "** instance id missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("update BaseModel")
+            self.assertEqual(expected_output, output.getvalue().strip())
+
+    def test_destroy_with_non_exist_id(self):
+        """test_update_with_non_exist_id"""
+        expected_output = "** no instance found **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("update BaseModel xxxx-xxxx-xxxx-xxxx")
+            self.assertEqual(expected_output, output.getvalue().strip())
+
+    def test_update_with_missing_attribute(self):
+        """test_update_with_missing_attribute"""
+        base = BaseModel()
+
+        expected_output = "** attribute name missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("update BaseModel {}".format(base.id))
+            self.assertEqual(expected_output, output.getvalue().strip())
+
+    def test_update_with_missing_attribute_value(self):
+        """test_update_with_missing_attribute"""
+        base = BaseModel()
+
+        expected_output = "** value missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("update BaseModel {} attr".format(base.id))
+            self.assertEqual(expected_output, output.getvalue().strip())
+
+    def test_update_user_first_name_attr(self):
+        """test_update_user_first_name_attr"""
+        user = User()
+        line = "update User {} first_name Hajar".format(user.id)
+
+        HBNBCommand().onecmd(line)
+        updated_user = models.storage.all()["User.{}".format(user.id)]
+        self.assertEqual(updated_user.first_name, "Hajar")
+
+    def test_update_place_check_float_type_attr(self):
+        """test_update_place_check_float_type_attr"""
+        place = Place()
+        line = "update Place {} latitude -8.242735".format(place.id)
+
+        HBNBCommand().onecmd(line)
+        updated_place = models.storage.all()["Place.{}".format(place.id)]
+        self.assertEqual(updated_place.latitude, -8.242735)
+        self.assertEqual(type(updated_place.latitude), float)
+
+    def test_update_place_check_int_type_attr(self):
+        """test_update_place_check_int_type_attr"""
+        place = Place()
+        line = "update Place {} number_rooms 35".format(place.id)
+
+        HBNBCommand().onecmd(line)
+        updated_place = models.storage.all()["Place.{}".format(place.id)]
+        self.assertEqual(updated_place.number_rooms, 35)
+        self.assertEqual(type(updated_place.number_rooms), int)
+
+    def test_update_place_check_str_type_attr(self):
+        """test_update_place_check_str_type_attr"""
+        place = Place()
+        line = "update Place {} name Amizmiz".format(place.id)
+
+        HBNBCommand().onecmd(line)
+        updated_place = models.storage.all()["Place.{}".format(place.id)]
+        self.assertEqual(updated_place.name, "Amizmiz")
+        self.assertEqual(type(updated_place.name), str)
 
 
 if __name__ == "__main__":
