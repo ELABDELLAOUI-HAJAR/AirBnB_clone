@@ -44,14 +44,18 @@ class HBNBCommand(cmd.Cmd):
             "count": self.count
         }
         # args = re.findall(r'\w+|"[0-9a-z-?]+"', line)
-        regex = r'\w+@\w+.\w+|[-+]?[0-9]*\.[0-9]+|[-+]?\w+|"[0-9a-z-?]+"'
-        args = re.findall(regex, line)
+        reg = r'\{.*?\}|\w+@\w+.\w+|[-+]?[0-9]*\.[0-9]+|[-+]?\w+|"[0-9a-z-?]+"'
+        args = re.findall(reg, line)
+
         args = [arg[1:-1] if arg[0] == '"' else arg for arg in args]
+
         # to bypass the test .all() :p
         if len(args) == 1 and args[0] in cmds.keys():
             args.insert(0, "NotExist")
         if len(args) >= 2 and args[1] in cmds.keys():
             return cmds[args[1]](args[0] + ' ' + " ".join(args[2:]))
+        else:
+            print("*** Unknown syntax: {}".format(line))
 
     def count(self, line):
         # should I add a check for an existing class???
@@ -126,8 +130,12 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """Updates an instance Usage:update <class> <id> <attr> <value>"""
-        args = self.split(line)
+        args = line.split(" ", 2)
+
         objects = models.storage.all()
+
+        if len(args) == 1 and args[0] == "":
+            args = []
 
         if len(args) == 0:
             print("** class name missing **")
@@ -139,20 +147,36 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         elif len(args) == 2:
             print("** attribute name missing **")
-        elif len(args) == 3:
-            print("** value missing **")
-        else:
-            args_list = args[2:]
-            obj = objects["{}.{}".format(args[0], args[1])]
+            return
 
-            for idx in range(0, len(args_list), 2):
-                if args_list[idx] in obj.__class__.__dict__.keys():
-                    val_type = type(obj.__class__.__dict__[args_list[idx]])
-                    obj.__dict__[args_list[idx]] = val_type(args_list[idx + 1])
+        obj = objects["{}.{}".format(args[0], args[1])]
+
+        if args[2][0] == "{":
+            args = eval(args[2])
+            for key in args.keys():
+                if key in obj.__class__.__dict__.keys():
+                    val_t = type(obj.__class__.__dict__[key])
+                    obj.__dict__[key] = val_t(args[key])
                 else:
-                    obj.__dict__[args_list[idx]] = args_list[idx + 1]
+                    obj.__dict__[key] = args[key]
             obj.__dict__["updated_at"] = datetime.now()
             models.storage.save()
+        else:
+            args = args[2].split(" ")
+
+            if len(args) > 2:
+                return
+            else:
+                if len(args) == 1:
+                    print("** value missing **")
+                else:
+                    if args[0] in obj.__class__.__dict__.keys():
+                        val_t = type(obj.__class__.__dict__[args[0]])
+                        obj.__dict__[args[0]] = val_t(args[1])
+                    else:
+                        obj.__dict__[args[0]] = args[1]
+                    obj.__dict__["updated_at"] = datetime.now()
+                    models.storage.save()
 
     def emptyline(self):
         """Method called when an empty line is entered
