@@ -55,7 +55,7 @@ class HBNBCommand(cmd.Cmd):
                    if obj.split(".")[0] == line.split()[0]]))
 
     def do_create(self, line):
-        """Creates a new instance of <Class> and saves it to a JSON file"""
+        """Creates instance and save it to a JSON file Usage:create <class>"""
         args = self.split(line)
 
         if len(args) == 0:
@@ -68,8 +68,7 @@ class HBNBCommand(cmd.Cmd):
             print(instance.id)
 
     def do_show(self, line):
-        """Prints the string representation of an instance
-        based on the class name and id """
+        """Prints str representation of instance Usage:show <class> <id>"""
         args = self.split(line)
 
         if len(args) == 0:
@@ -88,8 +87,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_all(self, line):
-        """Prints all string representation of all instances
-        based or not on the class name """
+        """Prints str representation of all class instances Usage:all <class>"""
         args = self.split(line)
         objects = models.storage.all()
 
@@ -102,8 +100,7 @@ class HBNBCommand(cmd.Cmd):
                    if obj.__class__.__name__ == args[0]])
 
     def do_destroy(self, line):
-        """Deletes an instance based on the class name and id
-        (save the change into the JSON file) """
+        """Deletes an instance Usage:destroy <class> <id> """
         args = self.split(line)
 
         if len(args) == 0:
@@ -123,8 +120,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_update(self, line):
-        """Updates an instance based on the class name and id by
-        adding or updating attribute """
+        """Updates an instance Usage:update <class> <id> <attr> <value>"""
         args = self.split(line)
         objects = models.storage.all()
 
