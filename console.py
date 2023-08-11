@@ -43,19 +43,20 @@ class HBNBCommand(cmd.Cmd):
             "update": self.do_update,
             "count": self.count
         }
-        # args = re.findall(r'\w+|"[0-9a-z-?]+"', line)
-        reg = r'\{.*?\}|\w+@\w+.\w+|[-+]?[0-9]*\.[0-9]+|[-+]?\w+|"[0-9a-z-?]+"'
-        args = re.findall(reg, line)
 
-        args = [arg[1:-1] if arg[0] == '"' else arg for arg in args]
+        # To get The first occurence of .
+        dot_match = re.search(r'\.', line)
+        class_name = line[:dot_match.span()[0]]
+        reste = line[dot_match.span()[1]:]
 
-        # to bypass the test .all() :p
-        if len(args) == 1 and args[0] in cmds.keys():
-            args.insert(0, "NotExist")
-        if len(args) >= 2 and args[1] in cmds.keys():
-            return cmds[args[1]](args[0] + ' ' + " ".join(args[2:]))
-        else:
-            print("*** Unknown syntax: {}".format(line))
+        parenthese = re.search(r'\(.*\)', reste)
+        if parenthese is not None:
+            cmd = reste[:parenthese.span()[0]]
+            all_arguments = parenthese.group()[1: -1]
+            all_arguments = "{} [{}]".format(class_name, all_arguments)
+            if cmd in cmds.keys():
+                return cmds[cmd](all_arguments)
+        print("*** Unknown syntax: {}".format(line))
 
     def count(self, line):
         # should I add a check for an existing class???
@@ -67,7 +68,7 @@ class HBNBCommand(cmd.Cmd):
         """Creates instance and save it to a JSON file Usage:create <class>"""
         args = self.split(line)
 
-        if len(args) == 0:
+        if len(args) == 1 and args[0] == "":
             print("** class name missing **")
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -80,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
         """Prints str representation of instance Usage:show <class> <id>"""
         args = self.split(line)
 
-        if len(args) == 0:
+        if len(args) == 1 and args[0] == "":
             print("** class name missing **")
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -100,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
         args = self.split(line)
         objects = models.storage.all()
 
-        if len(args) == 0:
+        if len(args) == 1 and args[0] == "":
             print([obj.__str__() for obj in objects.values()])
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -112,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
         """Deletes an instance Usage:destroy <class> <id> """
         args = self.split(line)
 
-        if len(args) == 0:
+        if len(args) == 1 and args[0] == "":
             print("** class name missing **")
         elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
@@ -130,55 +131,40 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """Updates an instance Usage:update <class> <id> <attr> <value>"""
-        args = line.split(" ", 2)
-        _args = split(line)
-
+        args = self.split(line)
         objects = models.storage.all()
 
-        if len(_args) == 0:
+        if len(args) == 1 and args[0] == "":
             print("** class name missing **")
-            return
-        elif _args[0] not in self.__classNames:
+        elif args[0] not in self.__classNames:
             print("** class doesn't exist **")
-            return
-        elif len(_args) == 1:
+        elif len(args) == 1:
             print("** instance id missing **")
-            return
-        elif "{}.{}".format(_args[0], _args[1]) not in objects.keys():
+        elif "{}.{}".format(args[0], args[1]) not in objects.keys():
             print("** no instance found **")
-            return
-        elif len(_args) == 2:
+        elif len(args) == 2:
             print("** attribute name missing **")
-            return
-
-        obj = objects["{}.{}".format(args[0], args[1])]
-
-        if args[2][0] == "{":
-            args = eval(args[2])
-            for key in args.keys():
+        elif args[2][0] == "{":
+            obj = objects["{}.{}".format(args[0], args[1])]
+            for key, value in eval(args[2]).items():
                 if key in obj.__class__.__dict__.keys():
-                    val_t = type(obj.__class__.__dict__[key])
-                    obj.__dict__[key] = val_t(args[key])
+                    value_type = type(obj.__class__.__dict__[key])
+                    obj.__dict__[key] = value_type(value)
                 else:
-                    obj.__dict__[key] = args[key]
+                    obj.__dict__[key] = value
             obj.__dict__["updated_at"] = datetime.now()
             models.storage.save()
+        elif len(args) == 3:
+            print("** value missing **")
         else:
-            args = args[2].split(" ")
-
-            if len(args) > 2:
-                return
+            obj = objects["{}.{}".format(args[0], args[1])]
+            if args[2] in obj.__class__.__dict__.keys():
+                value_type = type(obj.__class__.__dict__[args[2]])
+                obj.__dict__[args[2]] = value_type(args[3])
             else:
-                if len(args) == 1:
-                    print("** value missing **")
-                else:
-                    if args[0] in obj.__class__.__dict__.keys():
-                        val_t = type(obj.__class__.__dict__[args[0]])
-                        obj.__dict__[args[0]] = val_t(args[1])
-                    else:
-                        obj.__dict__[args[0]] = args[1]
-                    obj.__dict__["updated_at"] = datetime.now()
-                    models.storage.save()
+                obj.__dict__[args[2]] = args[3]
+            obj.__dict__["updated_at"] = datetime.now()
+            models.storage.save()
 
     def emptyline(self):
         """Method called when an empty line is entered
@@ -187,7 +173,35 @@ class HBNBCommand(cmd.Cmd):
 
     @staticmethod
     def split(line):
-        return split(line)
+        """split our arguments"""
+        class_match = re.search(r' ', line)
+        if class_match is not None:
+            _args = [line[:class_match.span()[0]],
+                     line[class_match.span()[1]:]]
+        else:
+            _args = [line]
+        curly = re.search(r'\{.*\}', line)
+        square = re.search(r'\[.*\]', line)
+
+        args = []
+
+        if curly is None:
+            if square is not None:
+                args = square.group()[1: -1].split(',')
+                args = [arg.strip().strip('"') for arg in args]
+            else:
+                if len(_args) > 1:
+                    args = _args[1].split()
+                    args = [arg.strip('"') for arg in args]
+        else:
+            curly = re.search(r'\{.*\}', _args[1])
+            args = re.findall(r'[^, ]+', _args[1][:curly.span()[0]])
+            args = [arg.strip('[').strip('"') for arg in args]
+            args.append(curly.group())
+        # remove empty string
+        args = [arg for arg in args if arg != '']
+        args.insert(0, _args[0])
+        return args
 
 
 if __name__ == '__main__':
