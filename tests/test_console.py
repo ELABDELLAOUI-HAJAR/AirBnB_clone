@@ -6,6 +6,7 @@ from models.base_model import BaseModel
 from models.amenity import Amenity
 from models.user import User
 from models.place import Place
+from models.review import Review
 from models.engine.file_storage import FileStorage
 import json
 import models
@@ -408,6 +409,15 @@ class TestConsole_update(TestCase):
         self.assertEqual(updated_place.name, "Amizmiz")
         self.assertEqual(type(updated_place.name), str)
 
+    def test_update_2_attrs(self):
+        """test_update_2_attrs"""
+        user = User()
+        line = "update User {} first_name Hajar last_name ALX"
+
+        HBNBCommand().onecmd(line.format(user.id))
+        self.assertEqual(user.first_name, "Hajar")
+        self.assertEqual(user.last_name, "")
+
 
 class TestConsole_default(TestCase):
     """Test case of Console default"""
@@ -481,6 +491,13 @@ class TestConsole_default(TestCase):
             amenity = Amenity()
             HBNBCommand().onecmd("Amenity.count()")
             self.assertEqual(output.getvalue().strip(), "1")
+    
+    def test_console_default_show_no_exist_class(self):
+        """test_console_default_show_no_exist_class"""
+        expected = "** class doesn't exist **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('NoExist.show("xxxx-xxxx-xxxx-xxxx")')
+            self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_show_no_exist_id(self):
         """test_console_default_show_no_exist_id"""
@@ -505,6 +522,13 @@ class TestConsole_default(TestCase):
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('User.show("{}")'.format(user.id))
             self.assertEqual(usr_str, output.getvalue().strip())
+
+    def test_console_default_destroy_no_exist_class(self):
+        """test_console_default_destroy_no_exist_class"""
+        expected = "** class doesn't exist **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('NoExist.destroy("xxxx-xxxx-xxxx-xxxx")')
+            self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_destroy_no_exist_id(self):
         """test_console_default_destroy_no_exist_id"""
@@ -548,7 +572,128 @@ class TestConsole_default(TestCase):
             HBNBCommand().onecmd("User.count()")
             self.assertEqual(output.getvalue().strip(), "0")
             
+    def test_console_default_update_no_exist_class(self):
+        """test_console_default_update_no_exist_class"""
+        expected = "** class doesn't exist **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('NoExist.update()')
+            self.assertEqual(expected, output.getvalue().strip())
 
+    def test_console_default_update_missing_id(self):
+        """test_console_default_update_missing_id"""
+        expected = "** instance id missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Amenity.update()')
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_update_no_exist_id(self):
+        """test_console_default_update_no_exist_id"""
+        expected = "** no instance found **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Amenity.update("xxxx-xxxx-xxxx-xxxx")')
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_update_attr_name_missing(self):
+        """test_console_default_update_attr_name_missing"""
+        expected = "** attribute name missing **"
+        amenity = Amenity()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Amenity.update("{}")'.format(amenity.id))
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_update_attr_value_missing(self):
+        """test_console_default_update_attr_value_missing"""
+        expected = "** value missing **"
+        amenity = Amenity()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Amenity.update("{}", "attr")'.format(amenity.id))
+            self.assertEqual(expected, output.getvalue().strip())
+
+    def test_console_default_update_user_email(self):
+        """test_console_default_update_user_email"""
+        user = User()
+        self.assertEqual(user.email, "")
+        user_mail = "Yassine_kech@alx.com"
+        cmd = 'User.update("{}", "email", {})'.format(user.id, user_mail)
+        HBNBCommand().onecmd(cmd)
+        self.assertEqual(user.email, user_mail)
+
+    def test_console_default_update_multiple_attrs(self):
+        """test_console_default_update_multiple_attrs"""
+        user = User()
+        user_mail = "Yassine_kech@alx.com"
+        user_pwd = "Y1990*$ssine"
+        cmd = 'User.update("{}", "email", {}, "password", {})'
+        HBNBCommand().onecmd(cmd.format(user.id, user_mail, user_pwd))
+        self.assertEqual(user.email, "Yassine_kech@alx.com")
+        self.assertEqual(user.password, "")
+
+    def test_console_default_update_by_using_dict(self):
+        """test_console_default_update_by_using_dict"""
+        place = Place()
+        amenity_list = [Amenity().id for i in range(4)]
+        desc = "Hotel Hajar: Best place in the world"
+        p_dict = {
+                "name": "Hotel Hajar",
+                "description": desc,
+                "number_rooms": "1",
+                "max_guest": 1,
+                "latitude": "7589.201",
+                "amenity_ids": amenity_list
+                }
+        cmd = 'Place.update("{}", {})'.format(place.id, p_dict)
+        HBNBCommand().onecmd(cmd)
+        self.assertEqual(place.name, "Hotel Hajar")
+        self.assertEqual(place.description, desc)
+        self.assertEqual(place.number_rooms, 1)
+        self.assertEqual(place.max_guest, 1)
+        self.assertEqual(place.latitude, 7589.201)
+        self.assertListEqual(place.amenity_ids, amenity_list)
+
+    def test_console_default_update_by_dict_check_types(self):
+        """test_console_default_update_by_dict_check_types"""
+        place = Place()
+        amenity_list = [Amenity().id for i in range(4)]
+        desc = "Hotel Hajar: Best place in the world"
+        p_dict = {
+                "name": "Hotel Hajar",
+                "description": desc,
+                "max_guest": 1,
+                "latitude": "7589.201",
+                "number_rooms": "1",
+                "amenity_ids": amenity_list
+                }
+        cmd = 'Place.update("{}", {})'.format(place.id, p_dict)
+        HBNBCommand().onecmd(cmd)
+        self.assertEqual(type(place.description), str)
+        self.assertEqual(type(place.max_guest), int)
+        self.assertEqual(type(place.number_rooms), int)
+        self.assertEqual(type(place.latitude), float)
+        self.assertEqual(type(place.amenity_ids), list)
+
+    def test_console_default_update_by_using_empty_dict(self):
+        """test_console_default_update_by_using_empty_dict"""
+        review = Review()
+        review.place_id = "xxxx-xxxx-xxxx-xxxx"
+        review.user_id = "yyyy-yyyy-yyyy-yyyy"
+        review.text = "Thank you Hajar <3"
+        cmd = 'Review.update("{}", {})'.format(review.id, {})
+        HBNBCommand().onecmd(cmd)
+        self.assertEqual(review.place_id, "xxxx-xxxx-xxxx-xxxx")
+        self.assertEqual(review.user_id, "yyyy-yyyy-yyyy-yyyy")
+        self.assertEqual(review.text, "Thank you Hajar <3")
+
+    def test_console_default_update_by_using_dict_special_characters(self):
+        """test_console_default_update_by_using_dict_special_characters"""
+        review = Review()
+        review.place_id = "xxxx-xxxx-xxxx-xxxx"
+        review.user_id = "yyyy-yyyy-yyyy-yyyy"
+        r_dict = {
+                "text": "Thank you Hajar <3 :)"
+                }
+        cmd = 'Review.update("{}", {})'.format(review.id, r_dict)
+        HBNBCommand().onecmd(cmd)
+        self.assertEqual(review.text, "Thank you Hajar <3 :)")
 
 if __name__ == "__main__":
     main()
