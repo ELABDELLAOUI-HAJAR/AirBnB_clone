@@ -32,7 +32,8 @@ class BaseModel:
                     self.updated_at = datetime.strptime(value, frmt)
                 else:
                     self.__dict__[key] = value
-        models.storage.new(self)
+        else:
+            models.storage.new(self)
 
     def __str__(self):
         """Return string representation of BaseModel"""
