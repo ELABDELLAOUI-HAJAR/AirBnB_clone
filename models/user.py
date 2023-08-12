@@ -6,7 +6,7 @@ from models.base_model import BaseModel
 class User(BaseModel):
     """Definition of the User Class
 
-    Class Attributes:
+    Attributes:
         email: User mail
         password: User account password
         first_name: User first name
