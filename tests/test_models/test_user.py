@@ -10,16 +10,16 @@ class TestUser(TestCase):
     """Definition of Test Class of User"""
 
     def test_user_inherits_base_model(self):
-        """test_user_inherits_base_model"""
+        """test user inherits base model"""
         self.assertTrue(issubclass(User, BaseModel))
 
     def test_user_with_valid_id(self):
-        """test_user_with_valid_id"""
+        """test user with valid id"""
         user = User()
         self.assertEqual(str(uuid.UUID(user.id)), user.id)
 
     def test_user_check_attributes(self):
-        """test_user_check_attributes"""
+        """test user check attributes"""
         user = User()
         self.assertTrue(hasattr(user, "id"))
         self.assertTrue(hasattr(user, "created_at"))
@@ -30,31 +30,31 @@ class TestUser(TestCase):
         self.assertTrue(hasattr(user, "last_name"))
 
     def test_user_set_first_name(self):
-        """test_user_set_first_name"""
+        """test user set first name"""
         user = User()
         user.first_name = "Yassine"
         self.assertEqual(user.first_name, "Yassine")
 
     def test_user_set_last_name(self):
-        """test_user_set_last_name"""
+        """test user set last name"""
         user = User()
         user.last_name = "Ait Mensour"
         self.assertEqual(user.last_name, "Ait Mensour")
 
     def test_user_set_email(self):
-        """test_user_set_email"""
+        """test user set email"""
         user = User()
         user.email = "Yassine@alx.com"
         self.assertEqual(user.email, "Yassine@alx.com")
 
     def test_user_set_password(self):
-        """test_user_set_password"""
+        """test user set password"""
         user = User()
         user.password = "Yassine@1990*$"
         self.assertEqual(user.password, "Yassine@1990*$")
 
     def test_user_to_dict(self):
-        """test_user_to_dict"""
+        """test user to dict"""
         user = User()
         user_dict = {
                 "__class__": "User",

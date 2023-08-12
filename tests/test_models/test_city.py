@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """This module contains tests for the City Class"""
 from unittest import TestCase, main
 from models.base_model import BaseModel
@@ -10,16 +11,16 @@ class TestCity(TestCase):
     """Definition of Test Class of City"""
 
     def test_city_inherits_base_model(self):
-        """test_city_inherits_base_model"""
+        """test city inherits base model"""
         self.assertTrue(issubclass(City, BaseModel))
 
     def test_city_with_valid_id(self):
-        """test_city_with_valid_id"""
+        """test city with valid id"""
         city = City()
         self.assertEqual(str(uuid.UUID(city.id)), city.id)
 
     def test_city_check_attributes(self):
-        """test_city_check_attributes"""
+        """test city check attributes"""
         city = City()
         self.assertTrue(hasattr(city, "id"))
         self.assertTrue(hasattr(city, "created_at"))
@@ -28,20 +29,20 @@ class TestCity(TestCase):
         self.assertTrue(hasattr(city, "state_id"))
 
     def test_city_set_name(self):
-        """test_city_set_name"""
+        """test city set name"""
         city = City()
         city.name = "Marrakech"
         self.assertEqual(city.name, "Marrakech")
 
     def test_city_set_state_id(self):
-        """test_city_set_name"""
+        """test city set name"""
         city = City()
         state = State()
         city.state_id = state.id
         self.assertEqual(city.state_id, state.id)
 
     def test_city_to_dict(self):
-        """test_city_to_dict"""
+        """test city to dict"""
         city = City()
         city_dict = {
                 "__class__": "City",

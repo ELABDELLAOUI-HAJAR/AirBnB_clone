@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """This Module contains tests for File_Storage Class"""
 from unittest import TestCase, main
 from unittest.mock import patch
@@ -14,19 +15,19 @@ class TestFileStorage_type(TestCase):
     """Define TestCases of FileStorage"""
 
     def test_file_storage_objects_type(self):
-        """test_file_storage_objects_type"""
+        """test file storage objects type"""
         self.assertEqual(type(FileStorage._FileStorage__objects), dict)
 
     def test_file_storage_file_path_type(self):
-        """test_file_storage_file_path_type"""
+        """test file storage file path type"""
         self.assertEqual(type(FileStorage._FileStorage__file_path), str)
 
     def test_file_storage_instance_storage(self):
-        """test_file_storage_instance_storage"""
+        """test file storage instance storage"""
         self.assertIsInstance(models.storage, FileStorage)
 
     def test_file_storage_instance(self):
-        """test_file_storage_instance"""
+        """test file storage instance"""
         self.assertEqual(type(models.storage), FileStorage)
 
 
@@ -34,13 +35,13 @@ class TestFileStorage_all(TestCase):
     """Define TestCase related to all method"""
 
     def test_storage_new_instance(self):
-        """test_storage_new_instance"""
+        """test storage new instance"""
         base = BaseModel()
         objs_keys = models.storage.all().keys()
         self.assertIn("BaseModel.{}".format(base.id), objs_keys)
 
     def test_storage_multiple_instances(self):
-        """test_storage_multiple_instances"""
+        """test storage multiple instances"""
         user = User()
         place = Place()
         base = BaseModel()
@@ -50,7 +51,7 @@ class TestFileStorage_all(TestCase):
         self.assertIn("User.{}".format(user.id), objs_keys)
 
     def test_file_storage_all_with_args(self):
-        """test_file_storage_all_with_args"""
+        """test file storage all with args"""
         with self.assertRaises(TypeError):
             models.storage.all("args")
 
@@ -59,12 +60,12 @@ class TestFileStorage_new(TestCase):
     """Define TestCase related to new method"""
 
     def test_storage_new_with_multiple_args(self):
-        """test_storage_new_with_multiple_args"""
+        """test storage new with multiple args"""
         with self.assertRaises(TypeError):
             models.storage.new(None, "args")
 
     def test_storage_new_no_valid_obj(self):
-        """test_storage_new_no_valid_obj"""
+        """test storage new no valid obj"""
         with self.assertRaises(AttributeError):
             models.storage.new("args")
 
@@ -82,12 +83,12 @@ class TestFileStorage_save(TestCase):
             pass
 
     def test_file_storage_save_with_args(self):
-        """test_file_storage_save_with_args"""
+        """test file storage save with args"""
         with self.assertRaises(TypeError):
             models.storage.save("args")
 
     def test_file_storage_save_into_file(self):
-        """test_file_storage_save_into_file"""
+        """test file storage save into file"""
         base = BaseModel()
         user = User()
         place = Place()
@@ -105,7 +106,7 @@ class TestFileStorage_reload(TestCase):
     """Define TestCase related to reload method"""
 
     def test_file_storage_reload(self):
-        """test_file_storage_reload"""
+        """test file storage reload"""
         base = BaseModel()
         user = User()
         place = Place()
@@ -116,7 +117,7 @@ class TestFileStorage_reload(TestCase):
         self.assertNotEqual(models.storage.all(), {})
 
     def test_file_storage_reload_check_data(self):
-        """test_file_storage_reload_check_data"""
+        """test file storage reload check data"""
         base = BaseModel()
         user = User()
         place = Place()
@@ -129,7 +130,7 @@ class TestFileStorage_reload(TestCase):
         self.assertIn("User.{}".format(user.id), objs_keys)
 
     def test_file_storage_reload_with_args(self):
-        """test_file_storage_reload_with_args"""
+        """test file storage reload with args"""
         with self.assertRaises(TypeError):
             models.storage.reload("args")
 

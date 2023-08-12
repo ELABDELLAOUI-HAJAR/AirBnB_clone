@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """This module contains tests for the Amenity Class"""
 from unittest import TestCase, main
 from models.base_model import BaseModel
@@ -9,16 +10,16 @@ class TestAmenity(TestCase):
     """Definition of Test Class of Amenity"""
 
     def test_amenity_inherits_base_model(self):
-        """test_amenity_inherits_base_model"""
+        """test amenity inherits base model"""
         self.assertTrue(issubclass(Amenity, BaseModel))
 
     def test_amenity_with_valid_id(self):
-        """test_amenity_with_valid_id"""
+        """test amenity with valid id"""
         amenity = Amenity()
         self.assertEqual(str(uuid.UUID(amenity.id)), amenity.id)
 
     def test_amenity_check_attributes(self):
-        """test_amenity_check_attributes"""
+        """test amenity check attributes"""
         amenity = Amenity()
         self.assertTrue(hasattr(amenity, "id"))
         self.assertTrue(hasattr(amenity, "created_at"))
@@ -26,13 +27,13 @@ class TestAmenity(TestCase):
         self.assertTrue(hasattr(amenity, "name"))
 
     def test_amenity_set_name(self):
-        """test_amenity_set_name"""
+        """test amenity set name"""
         amenity = Amenity()
         amenity.name = "Towel"
         self.assertEqual(amenity.name, "Towel")
 
     def test_amenity_to_dict(self):
-        """test_amenity_to_dict"""
+        """test amenity to dict"""
         amenity = Amenity()
         amenity_dict = {
                 "__class__": "Amenity",

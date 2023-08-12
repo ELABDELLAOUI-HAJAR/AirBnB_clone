@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """This module contains tests for the State Class"""
 from unittest import TestCase, main
 from models.base_model import BaseModel
@@ -9,16 +10,16 @@ class TestState(TestCase):
     """Definition of Test Class of State"""
 
     def test_state_inherits_base_model(self):
-        """test_state_inherits_base_model"""
+        """test state inherits base model"""
         self.assertTrue(issubclass(State, BaseModel))
 
     def test_state_with_valid_id(self):
-        """test_state_with_valid_id"""
+        """test state with valid id"""
         state = State()
         self.assertEqual(str(uuid.UUID(state.id)), state.id)
 
     def test_state_check_attributes(self):
-        """test_state_check_attributes"""
+        """test state check attributes"""
         state = State()
         self.assertTrue(hasattr(state, "id"))
         self.assertTrue(hasattr(state, "created_at"))
@@ -26,13 +27,13 @@ class TestState(TestCase):
         self.assertTrue(hasattr(state, "name"))
 
     def test_state_set_name(self):
-        """test_state_set_name"""
+        """test state set name"""
         state = State()
         state.name = "Marrakech-Safi"
         self.assertEqual(state.name, "Marrakech-Safi")
 
     def test_state_to_dict(self):
-        """test_state_to_dict"""
+        """test state to dict"""
         state = State()
         state_dict = {
                 "__class__": "State",
