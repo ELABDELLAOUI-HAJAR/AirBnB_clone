@@ -11,16 +11,16 @@ class TestReview(TestCase):
     """Definition of Test Class of Review"""
 
     def test_review_inherits_base_model(self):
-        """test_place_inherits_base_model"""
+        """test place inherits base model"""
         self.assertTrue(issubclass(Review, BaseModel))
 
     def test_review_with_valid_id(self):
-        """test_review_with_valid_id"""
+        """test review with valid id"""
         review = Review()
         self.assertEqual(str(uuid.UUID(review.id)), review.id)
 
     def test_review_check_attributes(self):
-        """test_review_check_attributes"""
+        """test review check attributes"""
         review = Review()
         self.assertTrue(hasattr(review, "id"))
         self.assertTrue(hasattr(review, "created_at"))
@@ -30,27 +30,27 @@ class TestReview(TestCase):
         self.assertTrue(hasattr(review, "text"))
 
     def test_review_set_text(self):
-        """test_review_set_text"""
+        """test review set text"""
         review = Review()
         review.text = "This is a dump review"
         self.assertEqual(review.text, "This is a dump review")
 
     def test_review_set_place_id(self):
-        """test_review_set_place_id"""
+        """test review set place id"""
         place = Place()
         review = Review()
         review.place_id = place.id
         self.assertEqual(review.place_id, place.id)
 
     def test_review_set_user_id(self):
-        """test_review_set_user_id"""
+        """test review set user id"""
         user = User()
         review = Review()
         review.user_id = user.id
         self.assertEqual(review.user_id, user.id)
 
     def test_review_to_dict(self):
-        """test_review_to_dict"""
+        """test review to dict"""
         review = Review()
         review_dict = {
                 "__class__": "Review",
