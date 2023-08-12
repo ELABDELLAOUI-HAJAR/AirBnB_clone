@@ -65,6 +65,41 @@ class TestReview(TestCase):
         review.text = "Test review"
         self.assertDictEqual(review_dict, review.to_dict())
 
+    def test_review_initialise_with_kwargs(self):
+        """test initialise review with kwargs"""
+        place_id = Place().id
+        user_id = User().id
+        r_dict = {
+            "id": str(uuid.uuid4()),
+            "place_id": place_id,
+            "user_id": user_id,
+            "text": "Review test"
+        }
+        review = Review(**r_dict)
+        self.assertEqual(r_dict["id"], review.id)
+        self.assertEqual(review.place_id, place_id)
+        self.assertEqual(review.user_id, user_id)
+        self.assertEqual(review.text, "Review test")
+
+    def test_review_initialise_with_args(self):
+        """test initialise review by using args"""
+        review = Review("xxxxxxxxxxxxxxxxxxx")
+        self.assertNotIn("xxxxxxxxxxxxxxxxxxx", review.__dict__.values())
+
+    def test_review_str_representation(self):
+        """test review str representation"""
+        review = Review()
+        r_str = "[Review] ({}) {}".format(review.id, review.__dict__)
+        self.assertEqual(review.__str__(), r_str)
+
+    def test_review_initialise_with_empty_kwargs(self):
+        """test initialise review with empty kwargs"""
+        r_dict = {}
+        review = Review(**r_dict)
+        self.assertEqual(review.place_id, "")
+        self.assertEqual(review.user_id, "")
+        self.assertEqual(review.text, "")
+
 
 if __name__ == "__main__":
     main()
