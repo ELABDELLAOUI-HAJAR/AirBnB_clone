@@ -129,6 +129,61 @@ class TestPlace(TestCase):
         place.max_guest = 643
         self.assertDictEqual(place_dict, place.to_dict())
 
+    def test_place_str_representation(self):
+        """test place str representation"""
+        place = Place()
+        p_str = "[Place] ({}) {}".format(place.id, place.__dict__)
+        self.assertEqual(place.__str__(), p_str)
+
+    def test_place_initialise_with_args(self):
+        """test initialise place by using args"""
+        place = Place("xxxxxxxxxxxxxxxxxxx")
+        self.assertNotIn("xxxxxxxxxxxxxxxxxxx", place.__dict__.values())
+
+    def test_place_initialise_with_empty_kwargs(self):
+        """test initialise user with empty kwargs"""
+        p_dict = {}
+        place = Place(**p_dict)
+        self.assertEqual(place.city_id, "")
+        self.assertEqual(place.user_id, "")
+        self.assertEqual(place.name, "")
+        self.assertEqual(place.description, "")
+        self.assertEqual(place.number_rooms, 0)
+        self.assertEqual(place.number_bathrooms, 0)
+        self.assertEqual(place.max_guest, 0)
+        self.assertEqual(place.price_by_night, 0)
+        self.assertEqual(place.latitude, 0.0)
+        self.assertEqual(place.longitude, 0.0)
+        self.assertEqual(place.amenity_ids, [])
+
+    def test_place_initialise_with_kwargs(self):
+        """test initialise place with kwargs"""
+        p_dict = {
+                "id": str(uuid.uuid4()),
+                "city_id": "hhhh-hhhh-hhhh-hhhh",
+                "user_id": "yyyy-yyyy-yyyy-yyyy",
+                "name": "Hotel",
+                "description": "Best Hotel",
+                "number_rooms": 500,
+                "number_bathrooms": 1000,
+                "max_guest": 1500,
+                "price_by_night": 750,
+                "latitude": 152.36,
+                "longitude": 3698.11
+                }
+        place = Place(**p_dict)
+        self.assertEqual(place.city_id, "hhhh-hhhh-hhhh-hhhh")
+        self.assertEqual(place.user_id, "yyyy-yyyy-yyyy-yyyy")
+        self.assertEqual(place.name, "Hotel")
+        self.assertEqual(place.description, "Best Hotel")
+        self.assertEqual(place.number_rooms, 500)
+        self.assertEqual(place.number_bathrooms, 1000)
+        self.assertEqual(place.max_guest, 1500)
+        self.assertEqual(place.price_by_night, 750)
+        self.assertEqual(place.latitude, 152.36)
+        self.assertEqual(place.longitude, 3698.11)
+
+
 
 if __name__ == "__main__":
     main()
