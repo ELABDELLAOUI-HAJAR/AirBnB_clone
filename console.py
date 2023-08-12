@@ -59,6 +59,7 @@ class HBNBCommand(cmd.Cmd):
         print("*** Unknown syntax: {}".format(line))
 
     def count(self, line):
+        """Returns the number of class instances"""
         # should I add a check for an existing class???
         objs = models.storage.all()
         print(len([obj for obj in objs.keys()
