@@ -1,3 +1,4 @@
+"""This module contains Test Cases of Console Module"""
 from unittest import TestCase, mock, main
 from console import HBNBCommand
 from io import StringIO
