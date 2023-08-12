@@ -46,6 +46,33 @@ class TestAmenity(TestCase):
         amenity.name = "Towel"
         self.assertDictEqual(amenity_dict, amenity.to_dict())
 
+    def test_amenity_initialise_with_kwargs(self):
+        """test initialise amenity with kwargs"""
+        a_dict = {
+                "id": str(uuid.uuid4()),
+                "name": "Towel"
+                }
+        amenity = Amenity(**a_dict)
+        self.assertEqual(a_dict["id"], amenity.id)
+        self.assertEqual(amenity.name, "Towel")
+
+    def test_amenity_initialise_with_args(self):
+        """test initialise amenity by using args"""
+        amenity = Amenity("xxxxxxxxxxxxxxxxxxx")
+        self.assertNotIn("xxxxxxxxxxxxxxxxxxx", amenity.__dict__.values())
+
+    def test_amenity_str_representation(self):
+        """test amenity str representation"""
+        amenity = Amenity()
+        a_str = "[Amenity] ({}) {}".format(amenity.id, amenity.__dict__)
+        self.assertEqual(amenity.__str__(), a_str)
+
+    def test_amenity_initialise_with_empty_kwargs(self):
+        """test initialise amenity with empty kwargs"""
+        a_dict = {}
+        amenity = Amenity(**a_dict)
+        self.assertEqual(amenity.name, "")
+
 
 if __name__ == "__main__":
     main()
