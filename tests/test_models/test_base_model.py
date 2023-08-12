@@ -102,7 +102,6 @@ class TestBaseModel_to_dict(TestCase):
         self.assertNotIn("__class__", b.__dict__.keys())
 
 
-
 class TestBaseModel_str(TestCase):
     """TestBaseModel_str"""
 

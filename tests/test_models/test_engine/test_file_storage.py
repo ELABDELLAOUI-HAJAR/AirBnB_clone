@@ -29,27 +29,31 @@ class TestFileStorage_type(TestCase):
         """test_file_storage_instance"""
         self.assertEqual(type(models.storage), FileStorage)
 
+
 class TestFileStorage_all(TestCase):
     """Define TestCase related to all method"""
 
     def test_storage_new_instance(self):
         """test_storage_new_instance"""
         base = BaseModel()
-        self.assertIn("BaseModel.{}".format(base.id), models.storage.all().keys())
+        objs_keys = models.storage.all().keys()
+        self.assertIn("BaseModel.{}".format(base.id), objs_keys)
 
     def test_storage_multiple_instances(self):
         """test_storage_multiple_instances"""
         user = User()
         place = Place()
         base = BaseModel()
-        self.assertIn("BaseModel.{}".format(base.id), models.storage.all().keys())
-        self.assertIn("Place.{}".format(place.id), models.storage.all().keys())
-        self.assertIn("User.{}".format(user.id), models.storage.all().keys())
+        objs_keys = models.storage.all().keys()
+        self.assertIn("BaseModel.{}".format(base.id), objs_keys)
+        self.assertIn("Place.{}".format(place.id), objs_keys)
+        self.assertIn("User.{}".format(user.id), objs_keys)
 
     def test_file_storage_all_with_args(self):
         """test_file_storage_all_with_args"""
         with self.assertRaises(TypeError):
             models.storage.all("args")
+
 
 class TestFileStorage_new(TestCase):
     """Define TestCase related to new method"""
@@ -63,6 +67,7 @@ class TestFileStorage_new(TestCase):
         """test_storage_new_no_valid_obj"""
         with self.assertRaises(AttributeError):
             models.storage.new("args")
+
 
 class TestFileStorage_save(TestCase):
     """Define TestCase related to save method"""
@@ -118,9 +123,10 @@ class TestFileStorage_reload(TestCase):
         models.storage.save()
         FileStorage._FileStorage__objects = {}
         models.storage.reload()
-        self.assertIn("BaseModel.{}".format(base.id), models.storage.all().keys())
-        self.assertIn("Place.{}".format(place.id), models.storage.all().keys())
-        self.assertIn("User.{}".format(user.id), models.storage.all().keys())
+        objs_keys = models.storage.all().keys()
+        self.assertIn("BaseModel.{}".format(base.id), objs_keys)
+        self.assertIn("Place.{}".format(place.id), objs_keys)
+        self.assertIn("User.{}".format(user.id), objs_keys)
 
     def test_file_storage_reload_with_args(self):
         """test_file_storage_reload_with_args"""

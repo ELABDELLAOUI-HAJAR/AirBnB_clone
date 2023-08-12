@@ -94,7 +94,7 @@ class TestPlace(TestCase):
         place = Place()
         place.latitude = 145.66
         self.assertEqual(place.latitude, 145.66)
-    
+
     def test_place_set_longitude(self):
         """test_place_longitude"""
         place = Place()

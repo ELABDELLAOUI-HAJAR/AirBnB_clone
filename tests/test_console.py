@@ -319,6 +319,7 @@ class TestConsole_destroy(TestCase):
             objs = json.load(f)
             self.assertNotIn("BaseModel.{}".format(base.id), objs.keys())
 
+
 class TestConsole_update(TestCase):
     """Test update command"""
 
@@ -421,7 +422,7 @@ class TestConsole_update(TestCase):
 
 class TestConsole_default(TestCase):
     """Test case of Console default"""
-    
+
     file_path = "HA_YA_FILE.json"
 
     def setUp(self):
@@ -444,11 +445,11 @@ class TestConsole_default(TestCase):
         place2.name = "Sale"
         objs = models.storage.all()
         base_list = [obj.__str__() for obj in objs.values()
-                if obj.__class__.__name__ == "BaseModel"]
+                     if obj.__class__.__name__ == "BaseModel"]
         user_list = [obj.__str__() for obj in objs.values()
-                if obj.__class__.__name__ == "User"]
+                     if obj.__class__.__name__ == "User"]
         place_list = [obj.__str__() for obj in objs.values()
-                if obj.__class__.__name__ == "Place"]
+                      if obj.__class__.__name__ == "Place"]
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("BaseModel.all()")
             objs_str = output.getvalue().strip()
@@ -468,7 +469,7 @@ class TestConsole_default(TestCase):
             HBNBCommand().onecmd("BaseModel.count()")
             self.assertEqual(output.getvalue().strip(), "0")
 
-        with mock.patch('sys.stdout', new=StringIO()) as output:     
+        with mock.patch('sys.stdout', new=StringIO()) as output:
             base1 = BaseModel()
             HBNBCommand().onecmd("BaseModel.count()")
             self.assertEqual(output.getvalue().strip(), "1")
@@ -491,7 +492,7 @@ class TestConsole_default(TestCase):
             amenity = Amenity()
             HBNBCommand().onecmd("Amenity.count()")
             self.assertEqual(output.getvalue().strip(), "1")
-    
+
     def test_console_default_show_no_exist_class(self):
         """test_console_default_show_no_exist_class"""
         expected = "** class doesn't exist **"
@@ -553,7 +554,6 @@ class TestConsole_default(TestCase):
         objs = models.storage.all()
         self.assertNotIn("User.{}".format(user.id), objs.keys())
 
-
     def test_console_default_destroy(self):
         """test_console_default_show"""
         user1 = User()
@@ -571,7 +571,7 @@ class TestConsole_default(TestCase):
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("User.count()")
             self.assertEqual(output.getvalue().strip(), "0")
-            
+
     def test_console_default_update_no_exist_class(self):
         """test_console_default_update_no_exist_class"""
         expected = "** class doesn't exist **"
@@ -605,8 +605,9 @@ class TestConsole_default(TestCase):
         """test_console_default_update_attr_value_missing"""
         expected = "** value missing **"
         amenity = Amenity()
+        id = amenity.id
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd('Amenity.update("{}", "attr")'.format(amenity.id))
+            HBNBCommand().onecmd('Amenity.update("{}", "attr")'.format(id))
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_update_user_email(self):
@@ -694,6 +695,7 @@ class TestConsole_default(TestCase):
         cmd = 'Review.update("{}", {})'.format(review.id, r_dict)
         HBNBCommand().onecmd(cmd)
         self.assertEqual(review.text, "Thank you Hajar <3 :)")
+
 
 if __name__ == "__main__":
     main()
