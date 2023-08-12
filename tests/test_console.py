@@ -19,17 +19,17 @@ class TestConsole_prompt(TestCase):
     """Test console prompt"""
 
     def test_console_prompt_value(self):
-        """test_console_prompt_value"""
+        """test console prompt value"""
         self.assertEqual(HBNBCommand.prompt, "(hbnb) ")
 
     def test_console_with_empty_line_or_space(self):
-        """test_console_with_empty_line_or_space"""
+        """test console with empty line or space"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("")
             self.assertEqual("", output.getvalue().strip())
 
     def test_console_with_new_line(self):
-        """test_console_with_new_line"""
+        """test console with new line"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("\n")
             self.assertEqual("", output.getvalue().strip())
@@ -39,35 +39,35 @@ class TestConsole_help(TestCase):
     """Test case command"""
 
     def test_console_help_EOF(self):
-        """test_console_help_EOF"""
+        """test console help EOF"""
         expected_output = "Exit when EOF or when Press CTRL+D"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help EOF")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_console_help_quit(self):
-        """test_console_help_quit"""
+        """test console help quit"""
         expected_output = "Quit to exit the program"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help quit")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_console_help_create(self):
-        """test_console_help_create"""
+        """test console help create"""
         e = "Creates instance and save it to a JSON file Usage:create <class>"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help create")
             self.assertEqual(e, output.getvalue().strip())
 
     def test_console_help_show(self):
-        """test_console_help_show"""
+        """test console help show"""
         e = "Prints str representation of instance Usage:show <class> <id>"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help show")
             self.assertEqual(e, output.getvalue().strip())
 
     def test_console_help_all(self):
-        """test_console_help_all"""
+        """test console help all"""
         e = "Prints str repr of"
         e += " all class instances Usage:all <class>"
         with mock.patch('sys.stdout', new=StringIO()) as output:
@@ -75,14 +75,14 @@ class TestConsole_help(TestCase):
             self.assertEqual(e, output.getvalue().strip())
 
     def test_console_help_destroy(self):
-        """test_console_help_destroy"""
+        """test console help destroy"""
         e = "Deletes an instance Usage:destroy <class> <id>"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help destroy")
             self.assertEqual(e, output.getvalue().strip())
 
     def test_console_help_update(self):
-        """test_console_help_update"""
+        """test console help update"""
         e = "Updates an instance Usage:update <class> <id> <attr> <value>"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help update")
@@ -95,21 +95,21 @@ class TestConsole_create(TestCase):
     file_path = "HA_YA_FILE.json"
 
     def test_create_with_missing_class(self):
-        """test_create_with_missing_class"""
+        """test create with missing class"""
         e = "** class name missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("create")
             self.assertEqual(e, output.getvalue().strip())
 
     def test_create_with_non_exist_class(self):
-        """test_create_with_non_exist_class"""
+        """test create with non exist class"""
         e = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("create NonExistClass")
             self.assertEqual(e, output.getvalue().strip())
 
     def test_create_base_model(self):
-        """test_create_base_model"""
+        """test create base model"""
         mock_id = str(uuid.uuid4())
         uuid_mock = mock.Mock(wraps=uuid.uuid4)
         uuid_mock.return_value = mock_id
@@ -119,7 +119,7 @@ class TestConsole_create(TestCase):
                 self.assertEqual(mock_id, output.getvalue().strip())
 
     def test_create_user(self):
-        """test_create_user"""
+        """test create user"""
         mock_id = str(uuid.uuid4())
         uuid_mock = mock.Mock(wraps=uuid.uuid4)
         uuid_mock.return_value = mock_id
@@ -129,7 +129,7 @@ class TestConsole_create(TestCase):
                 self.assertEqual(mock_id, output.getvalue().strip())
 
     def test_create_base_model_save_to_file(self):
-        """test_create_base_model_save_to_file"""
+        """test create base model save to file"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("create BaseModel")
             with open(self.file_path, "r") as f:
@@ -139,7 +139,7 @@ class TestConsole_create(TestCase):
                 self.assertIn("BaseModel.{}".format(output_value), objs.keys())
 
     def test_create_user_save_to_file(self):
-        """test_create_user_save_to_file"""
+        """test create user save to file"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("create User")
             with open(self.file_path, "r") as f:
@@ -153,12 +153,12 @@ class TestConsole_exit(TestCase):
     """Test exit from console commands"""
 
     def test_eof_command_return_value(self):
-        """test_eof_command_return_value"""
+        """test eof command return value"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             self.assertTrue(HBNBCommand().onecmd("EOF"))
 
     def test_quit_command_return_value(self):
-        """test_quit_command_return_value"""
+        """test quit command return value"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             self.assertTrue(HBNBCommand().onecmd("quit"))
 
@@ -167,35 +167,35 @@ class TestConsole_show(TestCase):
     """Test show command"""
 
     def test_show_missing_class(self):
-        """test_show_missing_class"""
+        """test show missing class"""
         expected_output = "** class name missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("show")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_with_non_exist_class(self):
-        """test_show_with_non_exist_class"""
+        """test show with non exist class"""
         expected_output = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("show NonExistClass")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_with_missing_id(self):
-        """test_show_with_missing_id"""
+        """test show with missing id"""
         expected_output = "** instance id missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("show BaseModel")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_with_non_exist_id(self):
-        """test_show_with_non_exist_id"""
+        """test show with non exist id"""
         expected_output = "** no instance found **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("show BaseModel xxxx-xxxx-xxxx-xxxx")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_existing_instance(self):
-        """test_show_existing_instance"""
+        """test show existing instance"""
         base_id = ""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("create BaseModel")
@@ -214,31 +214,32 @@ class TestConsole_all(TestCase):
     file_path = "HA_YA_FILE.json"
 
     def setUp(self):
+        """executes before each test"""
         FileStorage._FileStorage__objects = {}
 
     def test_all_with_non_exist_class(self):
-        """test_all_with_non_exist_class"""
+        """test all with non exist class"""
         expected_output = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("all NonExistClass")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_all_on_empty_storage(self):
-        """test_all_on_empty_storage"""
+        """test all on empty storage"""
         expected_output = "[]"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("all")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_all_with_class_on_empty_storage(self):
-        """test_all_with_class_on_empty_file"""
+        """test all with class on empty file"""
         expected_output = "[]"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("all BaseModel")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_all(self):
-        """test_all"""
+        """test all method"""
         base1 = BaseModel()
         base2 = BaseModel()
         user1 = User()
@@ -253,7 +254,7 @@ class TestConsole_all(TestCase):
             self.assertEqual(str(objs_list), objs_str)
 
     def test_all_with_class(self):
-        """test_all_with_class"""
+        """test all with class"""
         base1 = BaseModel()
         base2 = BaseModel()
         user1 = User()
@@ -275,35 +276,35 @@ class TestConsole_destroy(TestCase):
     file_path = "HA_YA_FILE.json"
 
     def test_destroy_missing_class(self):
-        """test_destroy_missing_class"""
+        """test destroy missing class"""
         expected_output = "** class name missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("destroy")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_destroy_with_non_exist_class(self):
-        """test_destroy_with_non_exist_class"""
+        """test destroy with non exist class"""
         expected_output = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("destroy NonExistClass")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_destroy_with_missing_id(self):
-        """test_destroy_with_missing_id"""
+        """test destroy with missing id"""
         expected_output = "** instance id missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("destroy BaseModel")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_destroy_with_non_exist_id(self):
-        """test_destroy_with_non_exist_id"""
+        """test destroy with non exist id"""
         expected_output = "** no instance found **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("destroy BaseModel xxxx-xxxx-xxxx-xxxx")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_destroy_existing_instance(self):
-        """test_destroy_existing_instance"""
+        """test destroy existing instance"""
         base = BaseModel()
 
         with mock.patch('sys.stdout', new=StringIO()) as output:
@@ -312,7 +313,7 @@ class TestConsole_destroy(TestCase):
             self.assertNotIn("BaseModel.{}".format(base.id), objects.keys())
 
     def test_destroy_and_check_file(self):
-        """test_destroy_and_check_file"""
+        """test destroy and check file"""
         base = BaseModel()
         models.storage.save()
 
@@ -328,35 +329,35 @@ class TestConsole_update(TestCase):
     file_path = "HA_YA_FILE.json"
 
     def test_update_missing_class(self):
-        """test_update_missing_class"""
+        """test update missing class"""
         expected_output = "** class name missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("update")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_update_with_non_exist_class(self):
-        """test_update_with_non_exist_class"""
+        """test update with non exist class"""
         expected_output = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("update NonExistClass")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_update_with_missing_id(self):
-        """test_update_with_missing_id"""
+        """test update with missing id"""
         expected_output = "** instance id missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("update BaseModel")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_destroy_with_non_exist_id(self):
-        """test_update_with_non_exist_id"""
+        """test update with non exist id"""
         expected_output = "** no instance found **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("update BaseModel xxxx-xxxx-xxxx-xxxx")
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_update_with_missing_attribute(self):
-        """test_update_with_missing_attribute"""
+        """test update with missing attribute"""
         base = BaseModel()
 
         expected_output = "** attribute name missing **"
@@ -365,7 +366,7 @@ class TestConsole_update(TestCase):
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_update_with_missing_attribute_value(self):
-        """test_update_with_missing_attribute"""
+        """test update with missing attribute"""
         base = BaseModel()
 
         expected_output = "** value missing **"
@@ -374,7 +375,7 @@ class TestConsole_update(TestCase):
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_update_user_first_name_attr(self):
-        """test_update_user_first_name_attr"""
+        """test update user first name attr"""
         user = User()
         line = "update User {} first_name Hajar".format(user.id)
 
@@ -383,7 +384,7 @@ class TestConsole_update(TestCase):
         self.assertEqual(updated_user.first_name, "Hajar")
 
     def test_update_place_check_float_type_attr(self):
-        """test_update_place_check_float_type_attr"""
+        """test update place check float type attr"""
         place = Place()
         line = "update Place {} latitude -8.242735".format(place.id)
 
@@ -393,7 +394,7 @@ class TestConsole_update(TestCase):
         self.assertEqual(type(updated_place.latitude), float)
 
     def test_update_place_check_int_type_attr(self):
-        """test_update_place_check_int_type_attr"""
+        """test update place check int type attr"""
         place = Place()
         line = "update Place {} number_rooms 35".format(place.id)
 
@@ -403,7 +404,7 @@ class TestConsole_update(TestCase):
         self.assertEqual(type(updated_place.number_rooms), int)
 
     def test_update_place_check_str_type_attr(self):
-        """test_update_place_check_str_type_attr"""
+        """test update place check str type attr"""
         place = Place()
         line = "update Place {} name Amizmiz".format(place.id)
 
@@ -413,7 +414,7 @@ class TestConsole_update(TestCase):
         self.assertEqual(type(updated_place.name), str)
 
     def test_update_2_attrs(self):
-        """test_update_2_attrs"""
+        """test update 2 attrs"""
         user = User()
         line = "update User {} first_name Hajar last_name ALX"
 
@@ -432,7 +433,7 @@ class TestConsole_default(TestCase):
         FileStorage._FileStorage__objects = {}
 
     def test_console_default_all(self):
-        """test_console_default_all"""
+        """test console default all"""
         base1 = BaseModel()
         base2 = BaseModel()
         user1 = User()
@@ -466,7 +467,7 @@ class TestConsole_default(TestCase):
             self.assertEqual(str(place_list), objs_str)
 
     def test_console_default_count(self):
-        """test_console_default_count"""
+        """test console default count"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("BaseModel.count()")
             self.assertEqual(output.getvalue().strip(), "0")
@@ -496,28 +497,28 @@ class TestConsole_default(TestCase):
             self.assertEqual(output.getvalue().strip(), "1")
 
     def test_console_default_show_no_exist_class(self):
-        """test_console_default_show_no_exist_class"""
+        """test console default show no exist class"""
         expected = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('NoExist.show("xxxx-xxxx-xxxx-xxxx")')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_show_no_exist_id(self):
-        """test_console_default_show_no_exist_id"""
+        """test console default show no exist id"""
         expected = "** no instance found **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('Place.show("xxxx-xxxx-xxxx-xxxx")')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_show_missing_id(self):
-        """test_console_default_show_no_exist_id"""
+        """test console default show no exist id"""
         expected = "** instance id missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('Place.show()')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_show(self):
-        """test_console_default_show"""
+        """test console default show"""
         user = User()
         user.email = "yassine1990@alx.com"
         user.password = "yassine@1991*$"
@@ -527,28 +528,28 @@ class TestConsole_default(TestCase):
             self.assertEqual(usr_str, output.getvalue().strip())
 
     def test_console_default_destroy_no_exist_class(self):
-        """test_console_default_destroy_no_exist_class"""
+        """test console default destroy no exist class"""
         expected = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('NoExist.destroy("xxxx-xxxx-xxxx-xxxx")')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_destroy_no_exist_id(self):
-        """test_console_default_destroy_no_exist_id"""
+        """test console default destroy no exist id"""
         expected = "** no instance found **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('Place.destroy("xxxx-xxxx-xxxx-xxxx")')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_destroy_missing_id(self):
-        """test_console_default_destroy_no_exist_id"""
+        """test console default destroy no exist id"""
         expected = "** instance id missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('Place.show()')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_destroy_instance(self):
-        """test_console_default_destroy_instance"""
+        """test console default destroy instance"""
         user = User()
         user.email = "yassine1990@alx.com"
         user.password = "yassine@1991*$"
@@ -557,7 +558,7 @@ class TestConsole_default(TestCase):
         self.assertNotIn("User.{}".format(user.id), objs.keys())
 
     def test_console_default_destroy(self):
-        """test_console_default_show"""
+        """test console default show"""
         user1 = User()
         user2 = User()
         user3 = User()
@@ -575,28 +576,28 @@ class TestConsole_default(TestCase):
             self.assertEqual(output.getvalue().strip(), "0")
 
     def test_console_default_update_no_exist_class(self):
-        """test_console_default_update_no_exist_class"""
+        """test console default update no exist class"""
         expected = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('NoExist.update()')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_update_missing_id(self):
-        """test_console_default_update_missing_id"""
+        """test console default update missing id"""
         expected = "** instance id missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('Amenity.update()')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_update_no_exist_id(self):
-        """test_console_default_update_no_exist_id"""
+        """test console default update no exist id"""
         expected = "** no instance found **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('Amenity.update("xxxx-xxxx-xxxx-xxxx")')
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_update_attr_name_missing(self):
-        """test_console_default_update_attr_name_missing"""
+        """test console default update attr name missing"""
         expected = "** attribute name missing **"
         amenity = Amenity()
         with mock.patch('sys.stdout', new=StringIO()) as output:
@@ -604,7 +605,7 @@ class TestConsole_default(TestCase):
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_update_attr_value_missing(self):
-        """test_console_default_update_attr_value_missing"""
+        """test console default update attr value missing"""
         expected = "** value missing **"
         amenity = Amenity()
         id = amenity.id
@@ -613,7 +614,7 @@ class TestConsole_default(TestCase):
             self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_update_user_email(self):
-        """test_console_default_update_user_email"""
+        """test console default update user email"""
         user = User()
         self.assertEqual(user.email, "")
         user_mail = "Yassine_kech@alx.com"
@@ -622,7 +623,7 @@ class TestConsole_default(TestCase):
         self.assertEqual(user.email, user_mail)
 
     def test_console_default_update_multiple_attrs(self):
-        """test_console_default_update_multiple_attrs"""
+        """test console default update multiple attrs"""
         user = User()
         user_mail = "Yassine_kech@alx.com"
         user_pwd = "Y1990*$ssine"
@@ -632,7 +633,7 @@ class TestConsole_default(TestCase):
         self.assertEqual(user.password, "")
 
     def test_console_default_update_by_using_dict(self):
-        """test_console_default_update_by_using_dict"""
+        """test console default update by using dict"""
         place = Place()
         amenity_list = [Amenity().id for i in range(4)]
         desc = "Hotel Hajar: Best place in the world"
@@ -654,7 +655,7 @@ class TestConsole_default(TestCase):
         self.assertListEqual(place.amenity_ids, amenity_list)
 
     def test_console_default_update_by_dict_check_types(self):
-        """test_console_default_update_by_dict_check_types"""
+        """test console default update by dict check types"""
         place = Place()
         amenity_list = [Amenity().id for i in range(4)]
         desc = "Hotel Hajar: Best place in the world"
@@ -675,7 +676,7 @@ class TestConsole_default(TestCase):
         self.assertEqual(type(place.amenity_ids), list)
 
     def test_console_default_update_by_using_empty_dict(self):
-        """test_console_default_update_by_using_empty_dict"""
+        """test console default update by using empty dict"""
         review = Review()
         review.place_id = "xxxx-xxxx-xxxx-xxxx"
         review.user_id = "yyyy-yyyy-yyyy-yyyy"
@@ -687,7 +688,7 @@ class TestConsole_default(TestCase):
         self.assertEqual(review.text, "Thank you Hajar <3")
 
     def test_console_default_update_by_using_dict_special_characters(self):
-        """test_console_default_update_by_using_dict_special_characters"""
+        """test console default update by using dict special characters"""
         review = Review()
         review.place_id = "xxxx-xxxx-xxxx-xxxx"
         review.user_id = "yyyy-yyyy-yyyy-yyyy"
