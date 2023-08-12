@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """This module contains tests for the State Class"""
 from unittest import TestCase, main
 from models.base_model import BaseModel

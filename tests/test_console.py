@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """This module contains Test Cases of Console Module"""
 from unittest import TestCase, mock, main
 from console import HBNBCommand
