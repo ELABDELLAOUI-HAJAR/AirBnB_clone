@@ -70,6 +70,39 @@ class TestUser(TestCase):
         user.last_name = "Ait Mensour"
         self.assertDictEqual(user_dict, user.to_dict())
 
+    def test_user_initialise_with_kwargs(self):
+        """test initialise user with kwargs"""
+        u_dict = {
+                "id": str(uuid.uuid4()),
+                "first_name": "Hajar",
+                "last_name": "ALX"
+                }
+        user = User(**u_dict)
+        self.assertEqual(u_dict["id"], user.id)
+        self.assertEqual(user.first_name, "Hajar")
+        self.assertEqual(user.last_name, "ALX")
+        self.assertEqual(user.email, "")
+        self.assertEqual(user.password, "")
+
+    def test_user_initialise_with_args(self):
+        """test initialise user by using args"""
+        user = User("xxxxxxxxxxxxxxxxxxx")
+        self.assertNotIn("xxxxxxxxxxxxxxxxxxx", user.__dict__.values())
+
+    def test_user_str_representation(self):
+        """test user str representation"""
+        user = User()
+        u_str = "[User] ({}) {}".format(user.id, user.__dict__)
+        self.assertEqual(user.__str__(), u_str)
+
+    def test_user_initialise_with_empty_kwargs(self):
+        """test initialise user with empty kwargs"""
+        u_dict = {}
+        user = User(**u_dict)
+        self.assertEqual(user.first_name, "")
+        self.assertEqual(user.last_name, "")
+        self.assertEqual(user.email, "")
+        self.assertEqual(user.password, "")
 
 if __name__ == "__main__":
     main()
