@@ -55,6 +55,36 @@ class TestCity(TestCase):
         city.name = "Marrakech"
         self.assertDictEqual(city_dict, city.to_dict())
 
+    def test_city_initialise_with_kwargs(self):
+        """test initialise city with kwargs"""
+        state_id = State().id
+        c_dict = {
+                "id": str(uuid.uuid4()),
+                "state_id": state_id,
+                "name": "Miami"
+                }
+        city = City(**c_dict)
+        self.assertEqual(c_dict["id"], city.id)
+        self.assertEqual(city.name, "Miami")
+        self.assertEqual(city.state_id, state_id)
+
+    def test_city_initialise_with_args(self):
+        """test initialise city by using args"""
+        city = City("xxxxxxxxxxxxxxxxxxx")
+        self.assertNotIn("xxxxxxxxxxxxxxxxxxx", city.__dict__.values())
+
+    def test_city_str_representation(self):
+        """test city str representation"""
+        city = City()
+        c_str = "[City] ({}) {}".format(city.id, city.__dict__)
+        self.assertEqual(city.__str__(), c_str)
+
+    def test_city_initialise_with_empty_kwargs(self):
+        """test initialise city with empty kwargs"""
+        c_dict = {}
+        city = City(**c_dict)
+        self.assertEqual(city.name, "")
+        self.assertEqual(city.state_id, "")
 
 if __name__ == "__main__":
     main()
