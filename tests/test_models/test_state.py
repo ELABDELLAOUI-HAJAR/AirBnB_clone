@@ -44,3 +44,7 @@ class TestState(TestCase):
         state_dict["name"] = "Marrakech-Safi"
         state.name = "Marrakech-Safi"
         self.assertDictEqual(state_dict, state.to_dict())
+
+
+if __name__ == "__main__":
+    main()

@@ -63,3 +63,7 @@ class TestReview(TestCase):
         review_dict["text"] = "Test review"
         review.text = "Test review"
         self.assertDictEqual(review_dict, review.to_dict())
+
+
+if __name__ == "__main__":
+    main()

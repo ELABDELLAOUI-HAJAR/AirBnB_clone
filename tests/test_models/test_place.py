@@ -127,3 +127,7 @@ class TestPlace(TestCase):
         place_dict["max_guest"] = 643
         place.max_guest = 643
         self.assertDictEqual(place_dict, place.to_dict())
+
+
+if __name__ == "__main__":
+    main()

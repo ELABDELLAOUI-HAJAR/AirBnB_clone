@@ -69,3 +69,7 @@ class TestUser(TestCase):
         user_dict["last_name"] = "Ait Mensour"
         user.last_name = "Ait Mensour"
         self.assertDictEqual(user_dict, user.to_dict())
+
+
+if __name__ == "__main__":
+    main()

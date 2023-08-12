@@ -53,3 +53,7 @@ class TestCity(TestCase):
         city_dict["name"] = "Marrakech"
         city.name = "Marrakech"
         self.assertDictEqual(city_dict, city.to_dict())
+
+
+if __name__ == "__main__":
+    main()

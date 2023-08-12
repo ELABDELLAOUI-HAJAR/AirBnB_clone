@@ -44,3 +44,7 @@ class TestAmenity(TestCase):
         amenity_dict["name"] = "Towel"
         amenity.name = "Towel"
         self.assertDictEqual(amenity_dict, amenity.to_dict())
+
+
+if __name__ == "__main__":
+    main()
