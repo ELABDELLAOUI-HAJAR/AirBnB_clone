@@ -6,6 +6,10 @@ from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 from models.place import Place
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 import models
 import os
 import json
@@ -68,6 +72,31 @@ class TestFileStorage_new(TestCase):
         """test storage new no valid obj"""
         with self.assertRaises(AttributeError):
             models.storage.new("args")
+    
+    def test_storage_new_instances(self):
+        """test storage new instances"""
+        base = BaseModel()
+        user = User()
+        place = Place()
+        amenity = Amenity()
+        review = Review()
+        city = City()
+        state = State()
+        models.storage.new(base)
+        models.storage.new(user)
+        models.storage.new(place)
+        models.storage.new(amenity)
+        models.storage.new(review)
+        models.storage.new(city)
+        models.storage.new(state)
+        Objs = models.storage.all()
+        self.assertIn("BaseModel.{}".format(base.id), Objs.keys())
+        self.assertIn("User.{}".format(user.id), Objs.keys())
+        self.assertIn("Place.{}".format(place.id), Objs.keys())
+        self.assertIn("Amenity.{}".format(amenity.id), Objs.keys())
+        self.assertIn("Review.{}".format(review.id), Objs.keys())
+        self.assertIn("City.{}".format(city.id), Objs.keys())
+        self.assertIn("State.{}".format(state.id), Objs.keys())
 
 
 class TestFileStorage_save(TestCase):
