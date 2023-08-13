@@ -127,6 +127,56 @@ class TestConsole_create(TestCase):
             with mock.patch('sys.stdout', new=StringIO()) as output:
                 HBNBCommand().onecmd("create User")
                 self.assertEqual(mock_id, output.getvalue().strip())
+    
+    def test_create_place(self):
+        """test create place"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                HBNBCommand().onecmd("create Place")
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_amenity(self):
+        """test create amenity"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                HBNBCommand().onecmd("create Amenity")
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_state(self):
+        """test create state"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                HBNBCommand().onecmd("create State")
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_city(self):
+        """test create city"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                HBNBCommand().onecmd("create City")
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_review(self):
+        """test create review"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                HBNBCommand().onecmd("create Review")
+                self.assertEqual(mock_id, output.getvalue().strip())
 
     def test_create_base_model_save_to_file(self):
         """test create base model save to file"""
