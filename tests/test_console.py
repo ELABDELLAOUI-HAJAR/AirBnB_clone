@@ -700,5 +700,22 @@ class TestConsole_default(TestCase):
         self.assertEqual(review.text, "Thank you Hajar <3 :)")
 
 
+class TestConsole_all_method(TestCase):
+    """Test console method: all"""
+
+    def setUp(self):
+        """setUp method executes before each test case"""
+        FileStorage._FileStorage__objects = {}
+
+    def test_base_model(self):
+        b = BaseModel()
+        objects = models.storage.all()
+        expected = [obj.__str__() for obj in objects.values()
+                    if obj.__class__.__name__ == "BaseModel"]
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('BaseModel.all()')
+            self.assertEqual(str(expected), output.getvalue().strip())
+
+
 if __name__ == "__main__":
     main()
