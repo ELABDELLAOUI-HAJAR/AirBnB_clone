@@ -57,6 +57,7 @@ class HBNBCommand(cmd.Cmd):
             if cmd in cmds.keys():
                 return cmds[cmd](all_arguments)
         print("*** Unknown syntax: {}".format(line))
+        return False
 
     def do_count(self, line):
         """Returns the number of class instances"""
