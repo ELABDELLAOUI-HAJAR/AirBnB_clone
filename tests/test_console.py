@@ -595,6 +595,31 @@ class TestConsole_default(TestCase):
             HBNBCommand().onecmd("Amenity.count()")
             self.assertEqual(output.getvalue().strip(), "1")
 
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            user = User()
+            HBNBCommand().onecmd("User.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            state = State()
+            HBNBCommand().onecmd("State.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            city = City()
+            HBNBCommand().onecmd("City.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            review = Review()
+            HBNBCommand().onecmd("Review.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            place = Place()
+            HBNBCommand().onecmd("Place.count()")
+            self.assertEqual(output.getvalue().strip(), "1")
+
     def test_console_default_show_no_exist_class(self):
         """test console default show no exist class"""
         expected = "** class doesn't exist **"
