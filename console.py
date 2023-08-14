@@ -41,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
             "show": self.do_show,
             "destroy": self.do_destroy,
             "update": self.do_update,
-            "count": self.count
+            "count": self.do_count
         }
 
         # To get The first occurence of .
@@ -58,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
                 return cmds[cmd](all_arguments)
         print("*** Unknown syntax: {}".format(line))
 
-    def count(self, line):
+    def do_count(self, line):
         """Returns the number of class instances"""
         # should I add a check for an existing class???
         objs = models.storage.all()
