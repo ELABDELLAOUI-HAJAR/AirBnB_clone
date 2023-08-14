@@ -98,6 +98,13 @@ class TestConsole_help(TestCase):
             HBNBCommand().onecmd("help update")
             self.assertEqual(e, output.getvalue().strip())
 
+    def test_console_help_count(self):
+        """test console help count"""
+        e = "Returns the number of class instances"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("help count")
+            self.assertEqual(e, output.getvalue().strip())
+
 
 class TestConsole_create(TestCase):
     """Test create command"""
