@@ -641,8 +641,8 @@ class TestConsole_default(TestCase):
             HBNBCommand().onecmd('Place.show()')
             self.assertEqual(expected, output.getvalue().strip())
 
-    def test_console_default_show(self):
-        """test console default show"""
+    def test_console_default_show_user(self):
+        """test console default show user"""
         user = User()
         user.email = "yassine1990@alx.com"
         user.password = "yassine@1991*$"
@@ -650,6 +650,54 @@ class TestConsole_default(TestCase):
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd('User.show("{}")'.format(user.id))
             self.assertEqual(usr_str, output.getvalue().strip())
+
+    def test_console_default_show_base(self):
+        """test console default show base"""
+        base = BaseModel()
+        base_str = base.__str__()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('BaseModel.show("{}")'.format(base.id))
+            self.assertEqual(base_str, output.getvalue().strip())
+
+    def test_console_default_show_place(self):
+        """test console default show place"""
+        place = Place()
+        place_str = place.__str__()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Place.show("{}")'.format(place.id))
+            self.assertEqual(place_str, output.getvalue().strip())
+
+    def test_console_default_show_state(self):
+        """test console default show state"""
+        state = State()
+        state_str = state.__str__()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('State.show("{}")'.format(state.id))
+            self.assertEqual(state_str, output.getvalue().strip())
+
+    def test_console_default_show_city(self):
+        """test console default show city"""
+        city = City()
+        city_str = city.__str__()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('City.show("{}")'.format(city.id))
+            self.assertEqual(city_str, output.getvalue().strip())
+
+    def test_console_default_show_review(self):
+        """test console default show review"""
+        review = Review()
+        review_str = review.__str__()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Review.show("{}")'.format(review.id))
+            self.assertEqual(review_str, output.getvalue().strip())
+
+    def test_console_default_show_amenity(self):
+        """test console default show amenity"""
+        amenity = Amenity()
+        amenity_str = amenity.__str__()
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('Amenity.show("{}")'.format(amenity.id))
+            self.assertEqual(amenity_str, output.getvalue().strip())
 
     def test_console_default_destroy_no_exist_class(self):
         """test console default destroy no exist class"""
