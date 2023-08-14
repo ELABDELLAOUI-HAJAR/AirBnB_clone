@@ -9,6 +9,8 @@ from models.amenity import Amenity
 from models.user import User
 from models.place import Place
 from models.review import Review
+from models.state import State
+from models.city import City
 from models.engine.file_storage import FileStorage
 import json
 import models
@@ -514,6 +516,11 @@ class TestConsole_default(TestCase):
         place1.name = "Marrakech"
         place2 = Place()
         place2.name = "Sale"
+        review = Review()
+        review.text = "Nice"
+        state = State()
+        city = City()
+        amenity = Amenity()
         objs = models.storage.all()
         base_list = [obj.__str__() for obj in objs.values()
                      if obj.__class__.__name__ == "BaseModel"]
@@ -521,6 +528,14 @@ class TestConsole_default(TestCase):
                      if obj.__class__.__name__ == "User"]
         place_list = [obj.__str__() for obj in objs.values()
                       if obj.__class__.__name__ == "Place"]
+        review_list = [obj.__str__() for obj in objs.values()
+                       if obj.__class__.__name__ == "Review"]
+        state_list = [obj.__str__() for obj in objs.values()
+                      if obj.__class__.__name__ == "State"]
+        city_list = [obj.__str__() for obj in objs.values()
+                     if obj.__class__.__name__ == "City"]
+        amenity_list = [obj.__str__() for obj in objs.values()
+                        if obj.__class__.__name__ == "Amenity"]
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("BaseModel.all()")
             objs_str = output.getvalue().strip()
@@ -533,6 +548,22 @@ class TestConsole_default(TestCase):
             HBNBCommand().onecmd("Place.all()")
             objs_str = output.getvalue().strip()
             self.assertEqual(str(place_list), objs_str)
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("Review.all()")
+            objs_str = output.getvalue().strip()
+            self.assertEqual(str(review_list), objs_str)
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("State.all()")
+            objs_str = output.getvalue().strip()
+            self.assertEqual(str(state_list), objs_str)
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("City.all()")
+            objs_str = output.getvalue().strip()
+            self.assertEqual(str(city_list), objs_str)
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("Amenity.all()")
+            objs_str = output.getvalue().strip()
+            self.assertEqual(str(amenity_list), objs_str)
 
     def test_console_default_count(self):
         """test console default count"""
