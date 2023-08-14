@@ -72,7 +72,7 @@ class TestFileStorage_new(TestCase):
         """test storage new no valid obj"""
         with self.assertRaises(AttributeError):
             models.storage.new("args")
-    
+
     def test_storage_new_instances(self):
         """test storage new instances"""
         base = BaseModel()

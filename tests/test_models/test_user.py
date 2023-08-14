@@ -104,5 +104,6 @@ class TestUser(TestCase):
         self.assertEqual(user.email, "")
         self.assertEqual(user.password, "")
 
+
 if __name__ == "__main__":
     main()

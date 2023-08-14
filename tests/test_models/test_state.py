@@ -55,18 +55,18 @@ class TestState(TestCase):
         state = State(**s_dict)
         self.assertEqual(s_dict["id"], state.id)
         self.assertEqual(state.name, "SALE")
-        
+
     def test_state_initialise_with_args(self):
         """test initialise state by using args"""
         state = State("xxxxxxxxxxxxxxxxxxx")
         self.assertNotIn("xxxxxxxxxxxxxxxxxxx", state.__dict__.values())
-        
+
     def test_state_str_representation(self):
         """test state str representation"""
         state = State()
         s_str = "[State] ({}) {}".format(state.id, state.__dict__)
         self.assertEqual(state.__str__(), s_str)
-        
+
     def test_state_initialise_with_empty_kwargs(self):
         """test initialise state with empty kwargs"""
         s_dict = {}

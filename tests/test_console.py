@@ -38,6 +38,15 @@ class TestConsole_prompt(TestCase):
 class TestConsole_help(TestCase):
     """Test case command"""
 
+    def test_console_help_command(self):
+        """test help command"""
+        expected = ("Documented commands (type help <topic>):\n"
+                    "========================================\n"
+                    "EOF  all  create  destroy  help  quit  show  update")
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd("help")
+            self.assertEqual(expected, output.getvalue().strip())
+
     def test_console_help_EOF(self):
         """test console help EOF"""
         expected_output = "Exit when EOF or when Press CTRL+D"
@@ -98,14 +107,14 @@ class TestConsole_create(TestCase):
         """test create with missing class"""
         e = "** class name missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("create")
+            self.assertFalse(HBNBCommand().onecmd("create"))
             self.assertEqual(e, output.getvalue().strip())
 
     def test_create_with_non_exist_class(self):
         """test create with non exist class"""
         e = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("create NonExistClass")
+            self.assertFalse(HBNBCommand().onecmd("create NonExistClass"))
             self.assertEqual(e, output.getvalue().strip())
 
     def test_create_base_model(self):
@@ -115,7 +124,7 @@ class TestConsole_create(TestCase):
         uuid_mock.return_value = mock_id
         with mock.patch('models.base_model.uuid4', new=uuid_mock):
             with mock.patch('sys.stdout', new=StringIO()) as output:
-                HBNBCommand().onecmd("create BaseModel")
+                self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
                 self.assertEqual(mock_id, output.getvalue().strip())
 
     def test_create_user(self):
@@ -125,13 +134,63 @@ class TestConsole_create(TestCase):
         uuid_mock.return_value = mock_id
         with mock.patch('models.base_model.uuid4', new=uuid_mock):
             with mock.patch('sys.stdout', new=StringIO()) as output:
-                HBNBCommand().onecmd("create User")
+                self.assertFalse(HBNBCommand().onecmd("create User"))
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_place(self):
+        """test create place"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                self.assertFalse(HBNBCommand().onecmd("create Place"))
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_amenity(self):
+        """test create amenity"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                HBNBCommand().onecmd("create Amenity")
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_state(self):
+        """test create state"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                self.assertFalse(HBNBCommand().onecmd("create State"))
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_city(self):
+        """test create city"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                self.assertFalse(HBNBCommand().onecmd("create City"))
+                self.assertEqual(mock_id, output.getvalue().strip())
+
+    def test_create_review(self):
+        """test create review"""
+        mock_id = str(uuid.uuid4())
+        uuid_mock = mock.Mock(wraps=uuid.uuid4)
+        uuid_mock.return_value = mock_id
+        with mock.patch('models.base_model.uuid4', new=uuid_mock):
+            with mock.patch('sys.stdout', new=StringIO()) as output:
+                self.assertFalse(HBNBCommand().onecmd("create Review"))
                 self.assertEqual(mock_id, output.getvalue().strip())
 
     def test_create_base_model_save_to_file(self):
         """test create base model save to file"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("create BaseModel")
+            self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
             with open(self.file_path, "r") as f:
                 objs = json.load(f)
 
@@ -141,7 +200,7 @@ class TestConsole_create(TestCase):
     def test_create_user_save_to_file(self):
         """test create user save to file"""
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("create User")
+            self.assertFalse(HBNBCommand().onecmd("create User"))
             with open(self.file_path, "r") as f:
                 objs = json.load(f)
 
@@ -170,41 +229,42 @@ class TestConsole_show(TestCase):
         """test show missing class"""
         expected_output = "** class name missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("show")
+            self.assertFalse(HBNBCommand().onecmd("show"))
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_with_non_exist_class(self):
         """test show with non exist class"""
         expected_output = "** class doesn't exist **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("show NonExistClass")
+            self.assertFalse(HBNBCommand().onecmd("show NonExistClass"))
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_with_missing_id(self):
         """test show with missing id"""
         expected_output = "** instance id missing **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("show BaseModel")
+            self.assertFalse(HBNBCommand().onecmd("show BaseModel"))
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_with_non_exist_id(self):
         """test show with non exist id"""
         expected_output = "** no instance found **"
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("show BaseModel xxxx-xxxx-xxxx-xxxx")
+            self.assertFalse(HBNBCommand().onecmd("show BaseModel xxxx-xxxx"))
             self.assertEqual(expected_output, output.getvalue().strip())
 
     def test_show_existing_instance(self):
         """test show existing instance"""
         base_id = ""
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("create BaseModel")
+            self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
             base_id = output.getvalue().strip()
 
         base = models.storage.all()["BaseModel.{}".format(base_id)]
         exp = base.__str__()
+        cmd = "show BaseModel {}".format(base_id)
         with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd("show BaseModel {}".format(base_id))
+            self.assertFalse(HBNBCommand().onecmd(cmd))
             self.assertEqual(exp, output.getvalue().strip())
 
 
@@ -700,21 +760,81 @@ class TestConsole_default(TestCase):
         self.assertEqual(review.text, "Thank you Hajar <3 :)")
 
 
-class TestConsole_all_method(TestCase):
-    """Test console method: all"""
+class TestConsole_show_user(TestCase):
+    """Test console : show user"""
+
+    def test_show_user_with_id_missing(self):
+        u = User()
+        expected = "** instance id missing **"
+        cmd = "User.show()"
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(cmd)
+            self.assertEqual(output.getvalue().strip(), expected)
+
+    def test_show_user_missing(self):
+        u = User()
+        expected = "** no instance found **"
+        cmd = "User.show('xxxx-xxxx-xxxx-xxxx')"
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(cmd)
+            self.assertEqual(output.getvalue().strip(), expected)
+
+    def test_show_user_with_id(self):
+        u = User()
+        expected = u.__str__()
+        cmd = "User.show({})".format(u.id)
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(cmd)
+            self.assertEqual(output.getvalue().strip(), expected)
+
+
+class TestHBNBCommand_count(TestCase):
+    """Unittests for testing count method of HBNB comand interpreter."""
 
     def setUp(self):
-        """setUp method executes before each test case"""
         FileStorage._FileStorage__objects = {}
 
-    def test_base_model(self):
-        b = BaseModel()
-        objects = models.storage.all()
-        expected = [obj.__str__() for obj in objects.values()
-                    if obj.__class__.__name__ == "BaseModel"]
-        with mock.patch('sys.stdout', new=StringIO()) as output:
-            HBNBCommand().onecmd('BaseModel.all()')
-            self.assertEqual(str(expected), output.getvalue().strip())
+    def test_count_invalid_class(self):
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("MyModel.count()"))
+            self.assertEqual("0", output.getvalue().strip())
+
+    def test_count_object(self):
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("BaseModel.count()"))
+            self.assertEqual("1", output.getvalue().strip())
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create User"))
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("User.count()"))
+            self.assertEqual("1", output.getvalue().strip())
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create State"))
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("State.count()"))
+            self.assertEqual("1", output.getvalue().strip())
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create Place"))
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("Place.count()"))
+            self.assertEqual("1", output.getvalue().strip())
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create City"))
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("City.count()"))
+            self.assertEqual("1", output.getvalue().strip())
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create Amenity"))
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("Amenity.count()"))
+            self.assertEqual("1", output.getvalue().strip())
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create Review"))
+        with mock.patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("Review.count()"))
+            self.assertEqual("1", output.getvalue().strip())
 
 
 if __name__ == "__main__":
