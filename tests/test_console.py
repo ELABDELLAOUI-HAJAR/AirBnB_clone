@@ -620,6 +620,13 @@ class TestConsole_default(TestCase):
             HBNBCommand().onecmd("Place.count()")
             self.assertEqual(output.getvalue().strip(), "1")
 
+    def test_console_default_show_missing_class(self):
+        """test console default show missing class"""
+        expected = "** class name missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('.show()')
+            self.assertEqual(expected, output.getvalue().strip())
+
     def test_console_default_show_no_exist_class(self):
         """test console default show no exist class"""
         expected = "** class doesn't exist **"
@@ -699,6 +706,13 @@ class TestConsole_default(TestCase):
             HBNBCommand().onecmd('Amenity.show("{}")'.format(amenity.id))
             self.assertEqual(amenity_str, output.getvalue().strip())
 
+    def test_console_default_destroy_missing_class(self):
+        """test console default destroy missing class"""
+        expected = "** class name missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('.destroy()')
+            self.assertEqual(expected, output.getvalue().strip())
+
     def test_console_default_destroy_no_exist_class(self):
         """test console default destroy no exist class"""
         expected = "** class doesn't exist **"
@@ -746,6 +760,13 @@ class TestConsole_default(TestCase):
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("User.count()")
             self.assertEqual(output.getvalue().strip(), "0")
+
+    def test_console_default_update_missing_class(self):
+        """test console default update missing class"""
+        expected = "** class name missing **"
+        with mock.patch('sys.stdout', new=StringIO()) as output:
+            HBNBCommand().onecmd('.update()')
+            self.assertEqual(expected, output.getvalue().strip())
 
     def test_console_default_update_no_exist_class(self):
         """test console default update no exist class"""
