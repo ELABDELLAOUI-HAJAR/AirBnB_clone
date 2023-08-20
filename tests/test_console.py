@@ -44,7 +44,7 @@ class TestConsole_help(TestCase):
         """test help command"""
         expected = ("Documented commands (type help <topic>):\n"
                     "========================================\n"
-                    "EOF  all  count  create  destroy  help  quit  show  "
+                    "EOF  all  create  destroy  help  quit  show  "
                     "update")
         with mock.patch('sys.stdout', new=StringIO()) as output:
             HBNBCommand().onecmd("help")
